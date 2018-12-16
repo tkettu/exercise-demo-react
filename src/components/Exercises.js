@@ -6,12 +6,24 @@ import exerciseService  from '../services/exercises'
 
 
 
-const Tab1 = () => (
-  <div>
-    TERVE
-    
-  </div>
-)
+
+
+//const ExericseList = (exercises) => {
+  const ExericseList = (props) => {
+  console.log(`EXERCISESIOT on ${exercises}`  )
+  
+  //const exerciseList = exercises.map((exercise) => 
+  //<li>exercise</li>
+  //)
+  return(
+    <div>
+      TÄNNE EXERCISELIST
+      EHKÄPÄ redux storesta se otetaan, kun se sinne loginissa laitettu on
+      
+    </div>
+    //return exerciseList
+  )
+}
 
 class Exercises extends React.Component {
   constructor(props) {
@@ -23,16 +35,16 @@ class Exercises extends React.Component {
     
   }
   
-  componentDidMount = () => {
-    this.setState({exercises: exerciseService.getAll()});
-    //console.log(this.state(exercises))
+  componentDidMount = async () => {
+    await this.setState({exercises: exerciseService.getAll()});
+    console.log(this.state.exercises)
     
   }
 
   render () {
     return (
     <div>
-      TT
+      {ExericseList(this.state.exercises)}
     </div>
     )
   }

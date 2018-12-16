@@ -14,15 +14,10 @@ const getAll = async () => {
         
     }
 
-    
-
     const config  = {
         headers: {'Authorization': "Bearer " + token}
       }
 
-    console.log("ATMA ON " + token)
-    console.log('CONFIG ' + config)
-    
     const response = await axios.get(baseUrl, config)
       .then(response => {
           console.log(response.data)
@@ -33,9 +28,7 @@ const getAll = async () => {
           
       })
     //const response = await axios.get(baseUrl)
-    
-    
-    
+   
 }
 
 export default { getAll }
