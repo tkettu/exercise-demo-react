@@ -69,7 +69,7 @@ export const login = ({username, password}) => {
           const token = parseJwt(user.accessToken)
 
           dispatch(successMsg(`Tervetuloa ${token.sub}`))
-          dispatch(exerciseInitialization())
+          //dispatch(exerciseInitialization())
           setTimeout(() => {
             dispatch(clearMsg())
           }, timeout)

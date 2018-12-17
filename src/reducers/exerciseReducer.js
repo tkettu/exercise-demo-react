@@ -22,6 +22,14 @@ export const exerciseCretion = (content) => {
     
 }
 
+export const exerciseRemoving = (id) => {
+
+}
+
+export const exerciseUpdating = (content) => {
+    
+}
+
 export const exerciseInitialization = () => {
     return async (dispatch) => {
         const exercises = await exerciseService.getAll()
