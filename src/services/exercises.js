@@ -19,14 +19,18 @@ const getAll = async () => {
       }
 
     const response = await axios.get(baseUrl, config)
-      .then(response => {
+      /* .then(response => {
           console.log(response.data)
-          return JSON.stringify(response.data)      
+          //return JSON.stringify(response.data)
+          return response.data      
       })
       .catch((error) => {
           console.log('error ' + error)
           
-      })
+      }) */
+      console.log(response.data)
+      console.log(typeof(response.data))
+      return response.data
     //const response = await axios.get(baseUrl)
    
 }

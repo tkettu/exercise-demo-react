@@ -1,6 +1,8 @@
 import React from 'react'
 
-import exerciseService  from '../services/exercises'
+import { connect }  from 'react-redux'
+import { exerciseInitialization } from '../reducers/exerciseReducer'
+import store from '../store'
 //Placeholder page
 
 
@@ -9,20 +11,35 @@ import exerciseService  from '../services/exercises'
 
 
 //const ExericseList = (exercises) => {
-  const ExericseList = (props) => {
-  console.log(`EXERCISESIOT on ${exercises}`  )
+  const ExericseList = (exercises) => {
+  console.log(`EXERCISESIOT on ${JSON.stringify(exercises)}`  )
+  console.log(store.getState())
+
+  const exercisesArray = Object.values(exercises)
+  console.log(typeof(exercisesArray))
   
+  
+  const exerciseList = exercisesArray.map((exercise) => 
+    <li>{exercise}</li>
+  ) 
+
+  console.log(exerciseList)
+
+  //return exerciseList 
+  //return JSON.stringify(exercises)
+
   //const exerciseList = exercises.map((exercise) => 
   //<li>exercise</li>
   //)
-  return(
+  return <div>R</div>
+  /*return(
     <div>
       TÄNNE EXERCISELIST
       EHKÄPÄ redux storesta se otetaan, kun se sinne loginissa laitettu on
       
     </div>
-    //return exerciseList
-  )
+    
+  )*/
 }
 
 class Exercises extends React.Component {
@@ -35,19 +52,30 @@ class Exercises extends React.Component {
     
   }
   
-  componentDidMount = async () => {
-    await this.setState({exercises: exerciseService.getAll()});
-    console.log(this.state.exercises)
+  /* componentWillMount = async () =>  {
+    await this.props.exerciseInitialization()
+    console.log(this.props.exercises)
     
-  }
+    
+  } */
+  
 
   render () {
     return (
     <div>
-      {ExericseList(this.state.exercises)}
+      {ExericseList(this.props.exercises)}
     </div>
     )
   }
 }
 
-export default Exercises
+const mapStateToProps = (state) => {
+  return {
+    exercises: store.getState().exerciseReducer
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  { exerciseInitialization }
+) (Exercises)

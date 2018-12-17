@@ -2,6 +2,7 @@ import loginService from '../services/login'
 import { userConstants } from '../constants/user.constants'
 import { history } from '../_helpers/history'
 import { errorMsg, successMsg, clearMsg } from './messageReducer'
+import { exerciseInitialization } from './exerciseReducer'
 
 const timeout = 5000
 
@@ -16,6 +17,7 @@ const reducer = (state = {}, action) => {
       window.localStorage.setItem(
         userConstants.LOCAL_STORAGE,
         JSON.stringify(action.data))
+        
       return {
               loggingIn: false,
               loggedIn: true,
@@ -67,6 +69,7 @@ export const login = ({username, password}) => {
           const token = parseJwt(user.accessToken)
 
           dispatch(successMsg(`Tervetuloa ${token.sub}`))
+          dispatch(exerciseInitialization())
           setTimeout(() => {
             dispatch(clearMsg())
           }, timeout)
