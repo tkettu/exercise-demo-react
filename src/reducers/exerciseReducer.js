@@ -5,7 +5,8 @@ const reducer = (state = [], action) => {
     switch (action.type) {
         case 'EXERCISES':
             return action.data
-            
+        case 'ONE_EXERCISE':
+            return action.data
         case 'NEW_EXERCISE':
             return [...state, action.data]
     
@@ -18,8 +19,15 @@ const reducer = (state = [], action) => {
     }
 }
 
-export const exerciseCretion = (content) => {
+export const exerciseCreation = (content) => {
+    return async (dispatch) => {
+        const newExercise = await exerciseService.addNew(content)
     
+        dispatch({
+            type: 'NEW_EXERCISE',
+            data: content
+        })
+    }
 }
 
 export const exerciseRemoving = (id) => {
@@ -28,6 +36,19 @@ export const exerciseRemoving = (id) => {
 
 export const exerciseUpdating = (content) => {
     
+}
+
+export const getOneExercise = (id) => {
+    return async (dispatch) => {
+        const exercise = await exerciseService.getOne(id)
+
+        console.log('HAETAAN ' + exercise)
+        
+        dispatch({
+            type: 'ONE_EXERCISE',
+            data: exercise
+        })
+    }
 }
 
 export const exerciseInitialization = () => {

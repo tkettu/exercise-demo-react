@@ -6,8 +6,8 @@ const baseUrl = '/api/exercises'
 let token = null
 
 
-const getAll = async () => {
-
+const getConfig = () => {
+    
     try {
         token = localStorage.getItem('user')    
     } catch (error) {
@@ -16,23 +16,46 @@ const getAll = async () => {
 
     const config  = {
         headers: {'Authorization': "Bearer " + token}
-      }
+    }
 
-    const response = await axios.get(baseUrl, config)
-      /* .then(response => {
-          console.log(response.data)
-          //return JSON.stringify(response.data)
-          return response.data      
-      })
-      .catch((error) => {
-          console.log('error ' + error)
-          
-      }) */
-      console.log(response.data)
-      console.log(typeof(response.data))
-      return response.data
-    //const response = await axios.get(baseUrl)
-   
+    console.log(config)
+    
+    return config
 }
 
-export default { getAll }
+const getAll = async () => {
+
+    const response = await axios.get(baseUrl, getConfig())
+     
+    return response.data   
+}
+
+const getOne = async ( id ) => {
+
+    const response = await axios.get(`${baseUrl}/${id}`, getConfig())
+    console.log(response.data)
+    
+    return response.data
+}
+
+const addNew = async ( content ) => {
+
+    const response = await axios.post(baseUrl, content, getConfig())
+
+    return response.data
+}
+
+const deleteExercise = async (id) => {
+
+    const response = await axios.delete(`${baseUrl}/${id}`, getConfig())
+
+    return response.data
+}
+
+const updateExercise = async ({ id, content }) => {
+
+    const response = await axios.put(`${baseUrl}/${id}`, content, getConfig())
+    return response.data
+}
+
+export default { getAll, addNew, deleteExercise, updateExercise, getOne }

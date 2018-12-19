@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { connect } from 'react-redux'
-import { exerciseInitialization } from '../reducers/exerciseReducer'
+import { exerciseInitialization, getOneExercise } from '../reducers/exerciseReducer'
 import store from '../store'
 import Moment from 'react-moment'
 import _ from 'lodash'
@@ -9,7 +9,7 @@ import { Table, Modal, Button, Icon, Header, Form } from 'semantic-ui-react'
 import { ExerciseForm } from './ExerciseForm'
 import ExerciseModal from './ExerciseModal'
 
-const ExerciseTable = ({ handleSort, column, data, direction }) => (
+const ExerciseTable = ({ handleSort, column, data, direction, modifyExercise }) => (
 
     <Table sortable celled fixed>
       <Table.Header>
@@ -44,7 +44,7 @@ const ExerciseTable = ({ handleSort, column, data, direction }) => (
       <Table.Body>
         {_.map(data, ({ id, sport, distance, hours, minutes, date }) => (
           <Table.Row key={id}>
-            <Table.Cell>{sport}</Table.Cell>
+            <Table.Cell onClick={modifyExercise(id)}>{sport}</Table.Cell>
             <Table.Cell>{distance}</Table.Cell>
             <Table.Cell>{hours}:{minutes}</Table.Cell>
             <Table.Cell>
@@ -95,19 +95,37 @@ class Exercises extends React.Component {
     super(props)
     this.state = {
       column: null,
-      data: props.exercises,
+      data: [],
       direction: null
     }
 
+
+    console.log(this.state.data)
+    
   }
 
-  componentWillMount() {
-    this.props.exerciseInitialization()
+   componentWillMount = async () => {
+    console.log('WILL MOUNT')
+    await this.props.exerciseInitialization()
+    this.setState({data: this.props.exercises})
+    
+  } 
+
+  componentDidMount() {
+    console.log('DID MOUNT')
+    
   }
+
+  componentDidUpdate() {
+    console.log('DID UPDATE')
+    
+  }
+
 
   handleSort = clickedColumn => () => {
     const { column, data, direction } = this.state
-
+    //data = this.props.exercises
+    
     if (column !== clickedColumn) {
       this.setState({
         column: clickedColumn,
@@ -125,15 +143,27 @@ class Exercises extends React.Component {
     })
   }
 
+  modifyExercise = ( id ) =>  async () => {
+    
+    console.log(id)
+    const exercise = await this.props.getOneExercise(id)
+    console.log(exercise)
+    
+    
+  }
+
   render() {
-
+    console.log('WILL RENDER')
+    console.log(this.state.data)
+    
     const { column, data, direction } = this.state
-
     return (
       <div>
         <ExerciseModal />
         <ExerciseTable handleSort={this.handleSort}
           column={column} data={data} direction={direction}
+          modifyExercise={this.modifyExercise}
+          
         />
         
       </div>
@@ -150,5 +180,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-  { exerciseInitialization }
+  { exerciseInitialization, getOneExercise }
 )(Exercises)

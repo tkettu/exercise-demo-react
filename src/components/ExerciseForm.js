@@ -2,7 +2,7 @@ import React from 'react'
 
 import { connect } from 'react-redux'
 import { Button, Form, Grid, Header } from 'semantic-ui-react'
-
+import { exerciseCreation } from '../reducers/exerciseReducer'
 
 //TODO Get options from API, by user
 const options = [
@@ -14,8 +14,10 @@ const options = [
 const NewExerciseForm = ({ handleSubmit, handleChange, handleSportChange }) =>  (
         <Form>
             <Form.Select label='Laji' name='sport' options={options} onChange={handleSportChange} />
-            <Form.Input label='Matka' name='distance' type='number' min={0} placeholder={0} onChange={handleChange}/>
-            <Form.Input label='Tunnit' name='hours' type='number' min={0} placeholder={0} onChange={handleChange}/>
+            <Form.Input label='Matka' name='distance' type='number'
+                 min={0} max={9999} placeholder={0} onChange={handleChange}
+                 />
+            <Form.Input label='Tunnit' name='hours' type='number' min={0} max={9999} placeholder={0} onChange={handleChange}/>
             <Form.Input label='Minuutit' name='minutes' type='number' min={0} max={59} placeholder={0} onChange={handleChange}/>
             <Form.Input label='Päivä' name='date' type='date' onChange={handleChange}/>
 
@@ -54,7 +56,10 @@ class ExerciseForm extends React.Component {
         e.preventDefault()
 
         const { sport, distance, hours, minutes, date } = this.state
-        console.log('LISATAAN ' + sport + ' ' + distance)    
+        console.log('LISATAAN ' + sport + ' ' + distance)  
+        const content = this.state
+        
+        this.props.exerciseCreation(content)
     }
 
     render() {
@@ -64,4 +69,7 @@ class ExerciseForm extends React.Component {
     }
 } 
 
-export default ExerciseForm
+export default connect(
+    null,
+    { exerciseCreation }
+)(ExerciseForm)
