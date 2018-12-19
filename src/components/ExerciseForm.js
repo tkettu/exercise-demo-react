@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { connect } from 'react-redux'
-import { Button, Form, Grid, Header } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Segment, Accordion, Menu } from 'semantic-ui-react'
 import { exerciseCreation } from '../reducers/exerciseReducer'
 
 //TODO Get options from API, by user
@@ -11,20 +11,52 @@ const options = [
     { key: 'WAL', text: 'Kävely', value: 'Kävely' }
 ]
 
+const panels = [
+    {
+      key: 'details',
+      title: 'Optional Details',
+      content: {
+        as: Form.Input,
+        label: 'Maiden Name',
+        placeholder: 'Maiden Name',
+      },
+    },
+  ]
+
+const ExtraForm = (
+    <div>
+        <Form.Group>
+            <Form.Input label='Syke ka' name='avgheartrate' type='number' min={0}/>
+            <Form.Input label='max syke' name='maxheartrate' type='number' min={0}/>
+        </Form.Group>
+        <Form.Input label='Kuvaus' name='description' type='text' />
+    </div>     
+    
+)
+
 const NewExerciseForm = ({ handleSubmit, handleChange, handleSportChange }) =>  (
+    <Segment>
+
         <Form>
             <Form.Select label='Laji' name='sport' options={options} onChange={handleSportChange} />
             <Form.Input label='Matka' name='distance' type='number'
                  min={0} max={9999} placeholder={0} onChange={handleChange}
                  />
-            <Form.Input label='Tunnit' name='hours' type='number' min={0} max={9999} placeholder={0} onChange={handleChange}/>
-            <Form.Input label='Minuutit' name='minutes' type='number' min={0} max={59} placeholder={0} onChange={handleChange}/>
+            <Form.Group widths={2}>
+            <Form.Input label='Tunnit' name='hours' type='number' 
+                min={0} max={9999} placeholder={0} onChange={handleChange}/>
+            <Form.Input label='Minuutit' name='minutes' type='number' 
+                min={0} max={59} placeholder={0} onChange={handleChange}/>
+            </Form.Group>
             <Form.Input label='Päivä' name='date' type='date' onChange={handleChange}/>
-
+            <Accordion as={Form.Group} >
+                <Accordion.Content active={false} content={ExtraForm} />
+            </Accordion>
             <Button onClick={handleSubmit} color='teal' fluid size='large'>
                 Lisää
             </Button>
         </Form>
+    </Segment>
     )
 
 class ExerciseForm extends React.Component {
@@ -36,7 +68,12 @@ class ExerciseForm extends React.Component {
             distance: 0,
             hours: 0,
             minutes: 0,
-            date: ''
+            date: '',
+            avgheartrate: 0,
+            maxheartrate: 0,
+            description: '',
+
+
         }
     }
 

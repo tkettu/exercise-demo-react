@@ -6,12 +6,13 @@ import ExerciseForm  from './ExerciseForm'
 const initStyle = {
     modal: {
         top: '0',
-        position: 'absolute'
+        position: 'absolute',
+        marginbottom: '1px',
     }
 }
 
 const ExerciseModal = () => (
-    <Modal trigger={<Button>Lisää harjoitus</Button>} style={initStyle.modal} >
+    <Modal trigger={<Button>Lisää harjoitus</Button>}  style={initStyle.modal}  >
       <Header icon='archive' content='Lisää uusi harjoitus' />
       <Modal.Content>
         <ExerciseForm />
@@ -23,9 +24,7 @@ const ExerciseModal = () => (
           <Form.Input label='Päivä' type='date' />
         </Form> */} 
       </Modal.Content>
-      <Modal.Actions>
-        <Button>Lisää</Button>
-      </Modal.Actions>
+      
     </Modal>
 )
 
