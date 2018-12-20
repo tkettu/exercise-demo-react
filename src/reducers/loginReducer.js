@@ -9,7 +9,7 @@ const timeout = 5000
 const reducer = (state = {}, action) => {
   switch (action.type) {
     case userConstants.LOGIN_REQUEST:
-      return {
+      return {  
         loggingIn: true,
         username: action.data
       }      

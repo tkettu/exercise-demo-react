@@ -8,6 +8,8 @@ import _ from 'lodash'
 import { Table, Modal, Button, Icon, Header, Form } from 'semantic-ui-react'
 import { ExerciseForm } from './ExerciseForm'
 import ExerciseModal from './ExerciseModal'
+import { exerciseConstants } from '../constants/exercise.constants'
+
 
 const ExerciseTable = ({ handleSort, column, data, direction, modifyExercise }) => (
 
@@ -106,8 +108,21 @@ class Exercises extends React.Component {
 
    componentWillMount = async () => {
     console.log('WILL MOUNT')
+    
     await this.props.exerciseInitialization()
-    this.setState({data: this.props.exercises})
+ 
+    console.log(this.props.exercises)
+    
+    this.setState({ data: this.props.exercises})
+    
+    const  { data } = this.state
+    //Initial sorting by user VARIABLE
+    this.setState({ 
+              column: exerciseConstants.INITIAL_SORT_COLUMN, 
+              data: _.sortBy(data, [exerciseConstants.INITIAL_SORT_COLUMN]).reverse() 
+            })
+    
+
     
   } 
 
@@ -125,6 +140,7 @@ class Exercises extends React.Component {
   handleSort = clickedColumn => () => {
     const { column, data, direction } = this.state
     //data = this.props.exercises
+    
     
     if (column !== clickedColumn) {
       this.setState({

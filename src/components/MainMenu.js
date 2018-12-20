@@ -33,7 +33,7 @@ const MainMenu = () => (
       <Menu.Item as={Link} to="/" >
         home
       </Menu.Item>
-      <Menu.Item as={Link} to="/tab1" >
+      <Menu.Item as={Link} to="/exercises" >
         Exercises
       </Menu.Item>
       <Menu.Item as={Link} to="/tab2" >
@@ -60,7 +60,7 @@ const MainMenu = () => (
       <Route path="/logout" render={() =>  <Logout /> } />
 
       {/*placeholders*/}
-      <Route path="/tab1" render={() => <Exercises />} />
+      <Route path="/exercises" render={() => <Exercises />} />
       <Route path="/tab2" render={() => <Tab2 />} />
       <Route path="/tab3" render={() => <Tab3 />} />
     </div> 

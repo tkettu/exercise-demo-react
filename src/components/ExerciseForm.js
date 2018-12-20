@@ -62,9 +62,10 @@ const NewExerciseForm = ({ handleSubmit, handleChange, handleSportChange }) =>  
 class ExerciseForm extends React.Component {
     constructor(props) {
         super(props)
-
+        console.log(props)
+        
         this.state = {
-            sport: '',
+            sport: 'Juoksu',
             distance: 0,
             hours: 0,
             minutes: 0,
@@ -97,6 +98,7 @@ class ExerciseForm extends React.Component {
         const content = this.state
         
         this.props.exerciseCreation(content)
+        this.props.handleSubmit()
     }
 
     render() {
