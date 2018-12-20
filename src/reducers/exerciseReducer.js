@@ -15,8 +15,12 @@ const reducer = (state = [], action) => {
             
             return [...state, action.data]
         
-        case 'DELETE_EXERCISE':
-            break
+        case exerciseConstants.DELETE_REQUEST:
+            //TODO return new state, where no deleted exercise
+            console.log(action.data)
+            console.log([...state])
+            return action.data
+            
         case 'UPDATE_EXERCISE':
             break            
         default:
@@ -30,6 +34,7 @@ const addFailure = (error) => ({ type: exerciseConstants.ADD_NEW_FAILURE, data: 
 
 const getAllRequest = (exercises) => ({ type: exerciseConstants.GET_ALL_REQUEST, data: exercises })
 
+const deleteRequest = (id) => ({ type: exerciseConstants.DELETE_REQUEST, data: id })
 
 
 /* export const exerciseCreation = (content) => {
@@ -70,7 +75,12 @@ export const exerciseCreation = (content) => {
 
 
 export const exerciseRemoving = (id) => {
+    return async (dispatch) => {
 
+        const response = await exerciseService.deleteExercise(id)
+
+        dispatch(deleteRequest(id))
+    }
 }
 
 export const exerciseUpdating = (content) => {

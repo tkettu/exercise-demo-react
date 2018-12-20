@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { connect } from 'react-redux'
-import { exerciseInitialization, getOneExercise } from '../reducers/exerciseReducer'
+import { exerciseInitialization, getOneExercise, exerciseRemoving } from '../reducers/exerciseReducer'
 import store from '../store'
 import Moment from 'react-moment'
 import _ from 'lodash'
@@ -11,7 +11,7 @@ import ExerciseModal from './ExerciseModal'
 import { exerciseConstants } from '../constants/exercise.constants'
 
 
-const ExerciseTable = ({ handleSort, column, data, direction, modifyExercise }) => (
+const ExerciseTable = ({ handleSort, column, data, direction, modifyExercise, deleteExercise }) => (
 
     <Table sortable celled fixed>
       <Table.Header>
@@ -41,6 +41,7 @@ const ExerciseTable = ({ handleSort, column, data, direction, modifyExercise }) 
           >
             Päivä
       </Table.HeaderCell>
+      <Table.HeaderCell width={1}></Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -54,6 +55,8 @@ const ExerciseTable = ({ handleSort, column, data, direction, modifyExercise }) 
                 {date}
               </Moment>
             </Table.Cell>
+            <Table.Cell onClick={deleteExercise(id)}><Icon name='delete' /></Table.Cell>
+            
           </Table.Row>
         ))}
       </Table.Body>
@@ -163,9 +166,21 @@ class Exercises extends React.Component {
     
     console.log(id)
     const exercise = await this.props.getOneExercise(id)
+    
     console.log(exercise)
     
+    //TODO Tämä Omaansa
+    //const deletedEx = await this.props.exerciseRemoving(id)
     
+  }
+
+  deleteExercise = (id) => async () => {
+    
+    const deletedEx = await this.props.exerciseRemoving(id)
+    console.log(` DELETED ${deletedEx}`)
+    
+    this.setState(this.state)
+    //this.forceUpdate()
   }
 
   render() {
@@ -175,11 +190,11 @@ class Exercises extends React.Component {
     const { column, data, direction } = this.state
     return (
       <div>
-        <ExerciseModal />
+        <ExerciseModal name='Lisää harjoitus'/>
         <ExerciseTable handleSort={this.handleSort}
           column={column} data={data} direction={direction}
           modifyExercise={this.modifyExercise}
-          
+          deleteExercise={this.deleteExercise}
         />
         
       </div>
@@ -196,5 +211,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-  { exerciseInitialization, getOneExercise }
+  { exerciseInitialization, getOneExercise, exerciseRemoving }
 )(Exercises)

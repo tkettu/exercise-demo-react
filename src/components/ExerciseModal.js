@@ -14,6 +14,9 @@ const initStyle = {
 class ExerciseModal extends React.Component {
   constructor(props){
     super(props)
+
+    console.log(props)
+    console.log('TASSA OLLAAN')
     this.state = { modalOpen : false }
   }
 
@@ -22,14 +25,14 @@ class ExerciseModal extends React.Component {
   
   render() {
     return (
-      <Modal trigger={<Button onClick={this.handleOpen}>Lisää harjoitus</Button>}  
+      <Modal trigger={<Button onClick={this.handleOpen}>{this.props.name}</Button>}  
         style={initStyle.modal}
         open={this.state.modalOpen}
         onClose={this.handleClose}
         >
       <Header icon='archive' content='Lisää uusi harjoitus' />
       <Modal.Content>
-        <ExerciseForm handleSubmit={this.handleClose}/>
+        <ExerciseForm handleSubmit={this.handleClose} content={this.props.content}/>
          
       </Modal.Content>
       

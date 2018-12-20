@@ -11,6 +11,8 @@ export const exerciseConstants = {
     GET_ALL_SUCCESS: 'EXERCISES_ALL_GET_SUCCESS',
     GET_ALL_FAILURE: 'EXERCISES_ALL_GET_FAILURE',
 
+    DELETE_REQUEST: 'DELETE_EXERCISE',
+    
 
     INITIAL_SORT_COLUMN: 'date',
 }

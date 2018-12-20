@@ -102,6 +102,12 @@ class ExerciseForm extends React.Component {
     }
 
     render() {
+
+        if (this.props.content !== null){
+            console.log(this.props.content)
+            
+        }
+
         return <NewExerciseForm handleChange={this.handleFieldChange}
                             handleSubmit={this.handleClick}
                             handleSportChange={this.handleSelectChange}/> 
