@@ -8,11 +8,20 @@ const timeout = 5000
 const reducer = (state = {}, action) => {
   switch (action.type) {
     case userConstants.REGISTER_REQUEST:
-      return action.data
+      return {
+        signingUp: true,
+        user: action.data
+      }
     case userConstants.REGISTER_SUCCESS:
-      return action.data
+      //Log in automatically, or demand manual login
+      return {
+        signingUp: false,
+        user: action.data
+      }
     case userConstants.REGISTER_FAILURE:
-      return {}
+      return {
+        signingUp: false
+      }
     default:
       return state
   }

@@ -6,8 +6,9 @@ import store from '../store'
 import Moment from 'react-moment'
 import _ from 'lodash'
 import { Table, Modal, Button, Icon, Header, Form } from 'semantic-ui-react'
-import { ExerciseForm } from './ExerciseForm'
+import ExerciseForm from './ExerciseForm'
 import ExerciseModal from './ExerciseModal'
+import Togglable from './Togglable'
 import { exerciseConstants } from '../constants/exercise.constants'
 
 
@@ -190,7 +191,9 @@ class Exercises extends React.Component {
     const { column, data, direction } = this.state
     return (
       <div>
-        <ExerciseModal name='Lisää harjoitus'/>
+        <Togglable buttonLabel="Lisää harjoitus">
+          <ExerciseForm />
+        </Togglable>
         <ExerciseTable handleSort={this.handleSort}
           column={column} data={data} direction={direction}
           modifyExercise={this.modifyExercise}

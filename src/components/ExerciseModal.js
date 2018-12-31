@@ -7,9 +7,25 @@ const initStyle = {
     modal: {
         top: '0',
         position: 'absolute',
-        marginbottom: '1px',
+        
     }
+    
 }
+
+const FormModal = ({ handleOpen, handleClose, modalOpen, content, name }) => (
+  <Modal  trigger={<Button onClick={handleOpen}>{name}</Button>}  
+        style={initStyle.modal}
+        open={modalOpen}
+        onClose={handleClose}
+        >
+      <Header icon='archive' content='Lisää uusi harjoitus' />
+      <Modal.Content>
+        <ExerciseForm handleSubmit={handleClose} content={content}/>
+         
+      </Modal.Content>
+      
+    </Modal>
+)
 
 class ExerciseModal extends React.Component {
   constructor(props){
@@ -25,18 +41,12 @@ class ExerciseModal extends React.Component {
   
   render() {
     return (
-      <Modal trigger={<Button onClick={this.handleOpen}>{this.props.name}</Button>}  
-        style={initStyle.modal}
-        open={this.state.modalOpen}
-        onClose={this.handleClose}
-        >
-      <Header icon='archive' content='Lisää uusi harjoitus' />
-      <Modal.Content>
-        <ExerciseForm handleSubmit={this.handleClose} content={this.props.content}/>
-         
-      </Modal.Content>
-      
-    </Modal>
+      <FormModal 
+        handleOpen={this.handleOpen} 
+        handleClose={this.handleClose}
+        modalOpen={this.state.modalOpen}
+        content={this.props.content}
+        name={this.props.name} />
     )
   }
 }

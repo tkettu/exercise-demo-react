@@ -26,7 +26,7 @@
     "server": "json-server -p3001 db.json",
     "server-auth": "node server/server.js"
   },
-  "proxy": "http://localhost:8080",
+  "proxy": "https://exercise-demo.herokuapp.com/",
   "browserslist": [
     ">0.2%",
     "not dead",

@@ -7,6 +7,64 @@ import { Button, Form, Grid, Header,
 
 import { register } from '../reducers/userReducer'
 import Notification from './Notification'
+import store from '../store';
+
+const Register = ({ signingUp=false, handleChange, handleSubmit, passwordError }) => (
+  <div className='login-form'>
+        <div>
+        <style>{`
+              body > div,
+              body > div > div,
+              body > div > div > div.login-form {
+                height: 100%;
+              }
+            `}</style>
+            <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
+              <Grid.Column style={{ maxWidth: 450 }}>
+                <Header as='h2' color='teal' textAlign='center'>
+                  {/*<Image src='/logo.png' />*/} Register
+                </Header>
+                <Notification />
+                <Form size='large' loading={signingUp}>
+                  <Segment stacked>
+                    <Form.Input 
+                      name='username'
+                      onChange={handleChange}
+                      fluid 
+                      icon='user'
+                      iconPosition='left'
+                      placeholder='Username' />
+                    <Form.Input
+                      name='password'
+                      onChange={handleChange}
+                      fluid
+                      icon='lock'
+                      iconPosition='left'
+                      placeholder='Password'
+                      type='password'
+                    />
+                    <Form.Input
+                      name='password2'
+                      onChange={handleChange}
+                      fluid
+                      icon='lock'
+                      iconPosition='left'
+                      placeholder='Password'
+                      type='password'
+                      error={passwordError}
+                    />
+    
+                    <Button onClick={handleSubmit} color='teal' fluid size='large'>
+                      Rekisteröidy
+                    </Button>
+                  </Segment>
+                </Form>
+              </Grid.Column>
+           </Grid>
+          </div>
+        </div>
+)
+
 
 class RegisterForm extends React.Component {
   constructor(props) {
@@ -19,6 +77,7 @@ class RegisterForm extends React.Component {
       username: '',
       password: '',
       password2: '',
+      passwordError: false,
       submitted: false
     }
   }
@@ -30,15 +89,26 @@ class RegisterForm extends React.Component {
 
   handleClick = (e) => {
     e.preventDefault()
+    console.log('TASSAOANBAI')
     
     const { username, password, password2 } = this.state
 
+    console.log(username)
+    console.log(password)
+    console.log(password2)
+    
+    
+     
     if(username && password===password2){
       const user = {
         username,
         password
       }
       this.props.register(user)
+    }else if (password!==password2){
+      this.setState({ passwordError : !this.state.passwordError })
+      console.log('VAARIN ON SALASAANT')
+      
     }
    /*  const { username, password } = this.state
     if(username && password){
@@ -55,63 +125,23 @@ class RegisterForm extends React.Component {
     }
  */
     return (
-      <div className='login-form'>
-        <div>
-        <style>{`
-              body > div,
-              body > div > div,
-              body > div > div > div.login-form {
-                height: 100%;
-              }
-            `}</style>
-            <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
-              <Grid.Column style={{ maxWidth: 450 }}>
-                <Header as='h2' color='teal' textAlign='center'>
-                  {/*<Image src='/logo.png' />*/} Register
-                </Header>
-                <Notification />
-                <Form size='large'>
-                  <Segment stacked>
-                    <Form.Input 
-                      name='username'
-                      onChange={this.handleLoginFieldChange}
-                      fluid 
-                      icon='user'
-                      iconPosition='left'
-                      placeholder='Username' />
-                    <Form.Input
-                      name='password'
-                      onChange={this.handleLoginFieldChange}
-                      fluid
-                      icon='lock'
-                      iconPosition='left'
-                      placeholder='Password'
-                      type='password'
-                    />
-                    <Form.Input
-                      name='password2'
-                      onChange={this.handleLoginFieldChange}
-                      fluid
-                      icon='lock'
-                      iconPosition='left'
-                      placeholder='Password'
-                      type='password'
-                    />
-    
-                    <Button onClick={this.handleClick} color='teal' fluid size='large'>
-                      Sign up
-                    </Button>
-                  </Segment>
-                </Form>
-              </Grid.Column>
-           </Grid>
-          </div>
-        </div>
+      <Register signingUp={this.props.signingUp}
+              handleChange={this.handleLoginFieldChange}
+              handleSubmit={this.handleClick}
+              passwordError={this.state.passwordError}
+            />
+      
     )
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    signingUp: store.getState().userReducer.signingUp
+  }
+}
+
 export default connect(
-  null,
+  mapStateToProps,
   { register }
 )(RegisterForm)

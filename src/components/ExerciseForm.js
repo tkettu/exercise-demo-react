@@ -38,17 +38,19 @@ const NewExerciseForm = ({ handleSubmit, handleChange, handleSportChange }) =>  
     <Segment>
 
         <Form>
-            <Form.Select label='Laji' name='sport' options={options} onChange={handleSportChange} />
-            <Form.Input label='Matka' name='distance' type='number'
+            <Form.Group>
+            <Form.Select label='Laji' name='sport' width={6} options={options} onChange={handleSportChange} />
+            <Form.Input label='Matka' name='distance' type='number' width={5}
                  min={0} max={9999} placeholder={0} onChange={handleChange}
                  />
+            <Form.Input label='Päivä' name='date' type='date' onChange={handleChange}/>
+            </Form.Group>
             <Form.Group widths={2}>
             <Form.Input label='Tunnit' name='hours' type='number' 
                 min={0} max={9999} placeholder={0} onChange={handleChange}/>
             <Form.Input label='Minuutit' name='minutes' type='number' 
                 min={0} max={59} placeholder={0} onChange={handleChange}/>
             </Form.Group>
-            <Form.Input label='Päivä' name='date' type='date' onChange={handleChange}/>
             <Accordion as={Form.Group} >
                 <Accordion.Content active={false} content={ExtraForm} />
             </Accordion>
