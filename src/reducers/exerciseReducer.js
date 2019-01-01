@@ -19,7 +19,8 @@ const reducer = (state = [], action) => {
             //TODO return new state, where no deleted exercise
             console.log(action.data)
             console.log([...state])
-            return action.data
+            
+            return [...state, action.data]
             
         case 'UPDATE_EXERCISE':
             break            
@@ -64,7 +65,8 @@ const deleteRequest = (id) => ({ type: exerciseConstants.DELETE_REQUEST, data: i
 export const exerciseCreation = (content) => {
     return async (dispatch) => {
         const newExercise = await exerciseService.addNew(content)
-
+        console.log(newExercise)
+        
         dispatch(addRequest(content))
         
         //TODO update state after adding new

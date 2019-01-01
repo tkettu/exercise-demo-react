@@ -138,8 +138,16 @@ class Exercises extends React.Component {
   componentDidUpdate() {
     console.log('DID UPDATE')
     
+    
   }
 
+  
+
+  componentWillReceiveProps() {
+    console.log('WILL RECEIVE PROPS')
+    
+    //this.setState({ data: this.props.exercises })
+  }
 
   handleSort = clickedColumn => () => {
     const { column, data, direction } = this.state
@@ -175,24 +183,47 @@ class Exercises extends React.Component {
     
   }
 
+  updateExerciseTable = () => {
+    this.setState({ data: this.props.exercises })
+    console.log(this.state.data)
+    console.log(this.props.exercises)
+    
+    
+    //this.setState(this.state)
+  }
+
   deleteExercise = (id) => async () => {
     
     const deletedEx = await this.props.exerciseRemoving(id)
     console.log(` DELETED ${deletedEx}`)
-    
-    this.setState(this.state)
+
+    this.updateExerciseTable()
+    //this.setState({ data: this.props.exercises })
+    //this.setState(this.state)
     //this.forceUpdate()
   }
+
+  /*handleToggle = () => {
+    this.setState({ data: this.props.exercises })
+    this.setState(this.state)
+    console.log(this.state.data)
+    console.log(this.props.exercises)
+    
+    
+    console.log('SULJETAATN TOGGLE')
+    
+  }*/
 
   render() {
     console.log('WILL RENDER')
     console.log(this.state.data)
-    
+    console.log(this.props.exercises)
+    //
     const { column, data, direction } = this.state
     return (
       <div>
         <Togglable buttonLabel="Lisää harjoitus">
-          <ExerciseForm />
+          <ExerciseForm handleSubmit={this.updateExerciseTable}/>
         </Togglable>
         <ExerciseTable handleSort={this.handleSort}
           column={column} data={data} direction={direction}
