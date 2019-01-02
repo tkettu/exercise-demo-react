@@ -185,34 +185,17 @@ class Exercises extends React.Component {
 
   updateExerciseTable = () => {
     this.setState({ data: this.props.exercises })
-    console.log(this.state.data)
-    console.log(this.props.exercises)
-    
-    
-    //this.setState(this.state)
+    const { data, column } = this.state
+
+    //Put new exercise in its own place, by user (or default) sorted column
+    this.setState({ data: _.sortBy(data, [column]) })
   }
 
   deleteExercise = (id) => async () => {
     
-    const deletedEx = await this.props.exerciseRemoving(id)
-    console.log(` DELETED ${deletedEx}`)
-
+    const deletedEx =  await this.props.exerciseRemoving(id)
     this.updateExerciseTable()
-    //this.setState({ data: this.props.exercises })
-    //this.setState(this.state)
-    //this.forceUpdate()
   }
-
-  /*handleToggle = () => {
-    this.setState({ data: this.props.exercises })
-    this.setState(this.state)
-    console.log(this.state.data)
-    console.log(this.props.exercises)
-    
-    
-    console.log('SULJETAATN TOGGLE')
-    
-  }*/
 
   render() {
     console.log('WILL RENDER')

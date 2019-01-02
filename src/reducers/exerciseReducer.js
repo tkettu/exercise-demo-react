@@ -11,17 +11,13 @@ const reducer = (state = [], action) => {
         case exerciseConstants.GET_ONE_REQUEST:
             return action.data
         case exerciseConstants.ADD_NEW_REQUEST:
-            console.log([...state, action.data])
-            
             return [...state, action.data]
-        
         case exerciseConstants.DELETE_REQUEST:
-            //TODO return new state, where no deleted exercise
-            console.log(action.data)
-            console.log([...state])
-            
-            return [...state, action.data]
-            
+            const index = state.findIndex(e => e.id === action.data)
+            if (index === -1) return state
+
+            const newState = state.slice(0, index).concat(state.slice(index+1, state.length))
+            return newState
         case 'UPDATE_EXERCISE':
             break            
         default:
@@ -29,7 +25,7 @@ const reducer = (state = [], action) => {
     }
 }
 
-const addRequest = (content) => ({ type: exerciseConstants.ADD_NEW_REQUEST, data: content })
+const addRequest = (newExercise) => ({ type: exerciseConstants.ADD_NEW_REQUEST, data: newExercise })
 const addSuccess = (exercise) => ({ type: exerciseConstants.ADD_NEW_SUCCESS, data: exercise })
 const addFailure = (error) => ({ type: exerciseConstants.ADD_NEW_FAILURE, data: error })
 
@@ -67,7 +63,7 @@ export const exerciseCreation = (content) => {
         const newExercise = await exerciseService.addNew(content)
         console.log(newExercise)
         
-        dispatch(addRequest(content))
+        dispatch(addRequest(newExercise))
         
         //TODO update state after adding new
         //exerciseInitialization()

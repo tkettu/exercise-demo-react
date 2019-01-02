@@ -36,8 +36,8 @@ const MainForm = ({ handleSportChange, handleChange }) => (
 const DateForm = ({ handleChange }) => (
     <Form.Group>
         <Form.Input label='Päivä' name='date' type='date' onChange={handleChange} />
-        <Form.Input label='Syke ka' name='avgheartrate' type='number' min={0} onChange={handleChange}/>
-        <Form.Input label='max syke' name='maxheartrate' type='number' min={0} onChange={handleChange}/>
+        <Form.Input label='Syke ka' name='avgheartrate' type='number' min={0} max={500} onChange={handleChange}/>
+        <Form.Input label='max syke' name='maxheartrate' type='number' min={0} max={500} onChange={handleChange}/>
         <Form.Select label='Kausi' name='season' options={seasonOptions} type='text' /> 
     </Form.Group>
 )
