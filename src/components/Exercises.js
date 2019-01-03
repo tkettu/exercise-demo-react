@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { exerciseInitialization, getOneExercise, exerciseRemoving } from '../reducers/exerciseReducer'
 import store from '../store'
 import Moment from 'react-moment'
+import moment from 'moment'
 import _ from 'lodash'
 import { Table, Modal, Button, Icon, Header, Form } from 'semantic-ui-react'
 import ExerciseForm from './ExerciseForm'
@@ -42,6 +43,7 @@ const ExerciseTable = ({ handleSort, column, data, direction, modifyExercise, de
           >
             Päivä
       </Table.HeaderCell>
+      <Table.HeaderCell>viikko</Table.HeaderCell>
       <Table.HeaderCell width={1}></Table.HeaderCell>
         </Table.Row>
       </Table.Header>
@@ -55,6 +57,9 @@ const ExerciseTable = ({ handleSort, column, data, direction, modifyExercise, de
               <Moment format="DD.MM.YY">
                 {date}
               </Moment>
+            </Table.Cell>
+            <Table.Cell>
+              {moment(date).isoWeek()}
             </Table.Cell>
             <Table.Cell onClick={deleteExercise(id)}><Icon name='delete' /></Table.Cell>
             
@@ -95,6 +100,105 @@ const ExerciseTable = ({ handleSort, column, data, direction, modifyExercise, de
     
 //   )
 // }
+
+const Filter = () => {
+  return (
+    <div>TANNE FILTERI</div>
+  )
+}
+
+
+const Summary =({ data }) => {
+  
+  //TODO lodash tai reduce laske summa
+  
+  const tulokset = _(data).groupBy('sport')
+                    .map((values, key) => ({
+                       'sport': key,
+                       'distance': _.sumBy(values, 'distance')
+                    })).value()
+
+  _.map(data, ({ date }) => (
+    console.log(moment(date).isoWeek())
+    
+  ))
+
+  const weeks = _.map(data, ({ date, distance, sport }) => ({
+    'sport': sport,
+    'distance': distance,
+    'weekAndYear': moment(date).isoWeek() + '/' +  moment(date).year()
+  }))
+
+  console.log((weeks))
+  
+  const weekResults = _.groupBy(weeks, (item) => {
+    return item.sport
+  })
+
+
+  const sportRes = _.forEach(weekResults, (value, key) => {
+    weekResults[key] = _.groupBy(weekResults[key], (item) => {
+      return item.weekAndYear
+    })
+  })
+
+
+  const sportRes2 =
+  _.forEach(weekResults, (value, key) => {
+    _(weekResults).groupBy('weekAndYear')
+      .map((values, key) => ({
+      'sport': key,
+      'total': _.sumBy(values, 'distance')
+    }))
+  })
+
+    //SUMMAA yli sportRes Viikkojen
+  /*const sportRes = _.forEach(weeks, (value, key) => {
+    weeks[key] = _.groupBy(weeks[key], (item) =>  {
+      return item.weekAndYear
+    })
+                        
+  })*/
+
+  console.log(weekResults)
+  console.log(sportRes)
+  console.log(sportRes2)
+  
+  
+
+
+                 /*.map((values, key) => ({
+                   'week': key,
+                   'total': _.sumBy(values, 'distance')
+                 })*/
+  
+  
+  
+
+  //TODO lisää viikon ja kuukaudennumerot jossain (backarissä vai täällä)  
+  /*const weekResults = _(data).groupBy('date')
+                      .map((values, key) => ({
+                        'week': key,
+                        'total': _.sumBy(values, 'distance')
+                      })).value()
+*/
+ 
+  
+  //_.filter(data,)
+  //const weekResults = _(data).groupBy({weekNumber})
+  //TODO Viikko ja kuukausitulokset yhteensä ja lajeittain
+  // Backendista vai täältä?, filterit lajeittain?
+
+  return(
+    <div>
+      {_.map(tulokset, ({sport, distance}) => (
+         <span key={sport} > {sport} on menty {distance} km </span> 
+      ))}
+
+     
+    </div>
+  )
+}
 
 class Exercises extends React.Component {
   constructor(props) {
@@ -208,6 +312,11 @@ class Exercises extends React.Component {
         <Togglable buttonLabel="Lisää harjoitus">
           <ExerciseForm handleSubmit={this.updateExerciseTable}/>
         </Togglable>
+        <Togglable buttonLabel="Filteröi">
+          <Filter />
+        </Togglable>
+        
+        <Summary data={data} />
         <ExerciseTable handleSort={this.handleSort}
           column={column} data={data} direction={direction}
           modifyExercise={this.modifyExercise}
