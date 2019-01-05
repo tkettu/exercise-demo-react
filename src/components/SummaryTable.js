@@ -30,7 +30,8 @@ const WeekSummary = ({ weekData }) => (
 
 const Summary = ({ data }) => {
 
-    const totalWeeks = _(data).groupBy('sport')
+    //Totals of all
+    const totals = _(data).groupBy('sport')
         .map((values, key) => ({
             'sport': key,
             'distance': _.sumBy(values, 'distance')
@@ -45,20 +46,26 @@ const Summary = ({ data }) => {
         'monthAndYear': moment(data).month() + '/' + moment(date).year()
     }))
 
+    const weekSummary = _(weeks).groupBy('weekAndYear')
+            .map((values, key) => ({
+                'week': key,
+                'total': _.sumBy(values, 'distance')
+            })).value()
+
     // Group by sports
-    const weeksBySport = _.groupBy(weeks, (item) => {
+   /* const weeksBySport = _.groupBy(weeks, (item) => {
         return item.sport
-    })
+    })*/
 
     // Then group by week
-    _.forEach(weeksBySport, (value, key) => {
+   /* _.forEach(weeksBySport, (value, key) => {
         weeksBySport[key] = _.groupBy(weeksBySport[key], (item) => {
             return item.weekAndYear
         })
-    })
+    })*/
 
     //
-    const weekSummary = []
+    /*const weekSummary = []
     //const sportRes2 =
     _.forEach(weeksBySport, (value, key) => {
         console.log(value)
@@ -79,7 +86,7 @@ const Summary = ({ data }) => {
     })
 
     console.log(weekSummary)
-    
+    */
 
     return <WeekSummary weekData={weekSummary} />
 }

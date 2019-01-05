@@ -1,12 +1,13 @@
 import React from 'react'
 
 import { connect } from 'react-redux'
-import { exerciseInitialization, getOneExercise, exerciseRemoving } from '../reducers/exerciseReducer'
+import { exerciseInitialization, getOneExercise, 
+  exerciseRemoving, filterBySport } from '../reducers/exerciseReducer'
 import store from '../store'
 import Moment from 'react-moment'
 import moment from 'moment'
 import _ from 'lodash'
-import { Table, Icon } from 'semantic-ui-react'
+import { Table, Icon, Segment, Form } from 'semantic-ui-react'
 import ExerciseForm from './ExerciseForm'
 import Togglable from './Togglable'
 import { exerciseConstants } from '../constants/exercise.constants'
@@ -70,13 +71,21 @@ const ExerciseTable = ({ handleSort, column, data, direction, modifyExercise, de
   )
 
 
+  const options = [
+    { key: 'RUN', text: 'Juoksu', value: 'Juoksu' },
+    { key: 'SKI', text: 'Hiihto', value: 'Hiihto' },
+    { key: 'WAL', text: 'Kävely', value: 'Kävely' }
+]
 
+const Filter = ({ handleSportChange }) => (
+  <Segment>
+    <Form>
+      <Form.Select label='Laji' name='sport' options={options}
+        onChange={handleSportChange} />
+    </Form>
+  </Segment>
+)
 
-const Filter = () => {
-  return (
-    <div>TANNE FILTERI</div>
-  )
-}
 
 
 class Exercises extends React.Component {
@@ -85,14 +94,18 @@ class Exercises extends React.Component {
     this.state = {
       column: null,
       data: [],
-      direction: null
+      direction: null,
+      sport: ''
     }
     
   }
 
    componentWillMount = async () => {
+
+    console.log(this.props.sport)
+    
     await this.props.exerciseInitialization()
- 
+    
     this.setState({ data: this.props.exercises})
     
     const  { data } = this.state
@@ -148,6 +161,13 @@ class Exercises extends React.Component {
     this.updateExerciseTable()
   }
 
+  handleSportChange = async (e, { value }) => {
+    console.log(`UUSI SPORTTI ${value}`)
+    
+    const exercises = await this.props.filterBySport(value)
+    this.updateExerciseTable()
+  }
+
   render() {
    
     const { column, data, direction } = this.state
@@ -157,7 +177,7 @@ class Exercises extends React.Component {
           <ExerciseForm handleSubmit={this.updateExerciseTable}/>
         </Togglable>
         <Togglable buttonLabel="Yhteenveto">
-          <Filter />
+          <Filter handleSportChange={this.handleSportChange}/>
           <SummaryTable data={data} />
         </Togglable>
        
@@ -181,5 +201,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-  { exerciseInitialization, getOneExercise, exerciseRemoving }
+  { exerciseInitialization, getOneExercise, exerciseRemoving, filterBySport }
 )(Exercises)

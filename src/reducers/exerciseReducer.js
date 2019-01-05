@@ -7,15 +7,15 @@ const timeout = 5000
 const reducer = (state = [], action) => {
     switch (action.type) {
         case exerciseConstants.GET_ALL_REQUEST:
-            return action.data
         case exerciseConstants.GET_ONE_REQUEST:
+        case exerciseConstants.GET_SPORTS_REQUEST:
             return action.data
+
         case exerciseConstants.ADD_NEW_REQUEST:
             return [...state, action.data]
         case exerciseConstants.DELETE_REQUEST:
             const index = state.findIndex(e => e.id === action.data)
             if (index === -1) return state
-
             const newState = state.slice(0, index).concat(state.slice(index+1, state.length))
             return newState
         case 'UPDATE_EXERCISE':
@@ -25,11 +25,19 @@ const reducer = (state = [], action) => {
     }
 }
 
-const addRequest = (newExercise) => ({ type: exerciseConstants.ADD_NEW_REQUEST, data: newExercise })
-const addSuccess = (exercise) => ({ type: exerciseConstants.ADD_NEW_SUCCESS, data: exercise })
-const addFailure = (error) => ({ type: exerciseConstants.ADD_NEW_FAILURE, data: error })
+const addRequest = (newExercise) => ({ 
+    type: exerciseConstants.ADD_NEW_REQUEST, data: newExercise })
+const addSuccess = (exercise) => ({ 
+    type: exerciseConstants.ADD_NEW_SUCCESS, data: exercise })
+const addFailure = (error) => ({ 
+    type: exerciseConstants.ADD_NEW_FAILURE, data: error })
 
-const getAllRequest = (exercises) => ({ type: exerciseConstants.GET_ALL_REQUEST, data: exercises })
+const getOneRequest = (exercise) => ({ 
+    type: exerciseConstants.GET_ONE_REQUEST, data: exercise })
+const getAllRequest = (exercises) => ({ 
+    type: exerciseConstants.GET_ALL_REQUEST, data: exercises })
+const getAllBySportRequest = (exercises) => ({
+     type: exerciseConstants.GET_SPORTS_REQUEST, data: exercises })
 
 const deleteRequest = (id) => ({ type: exerciseConstants.DELETE_REQUEST, data: id })
 
@@ -64,9 +72,6 @@ export const exerciseCreation = (content) => {
         console.log(newExercise)
         
         dispatch(addRequest(newExercise))
-        
-        //TODO update state after adding new
-        //exerciseInitialization()
     }
 }
 
@@ -85,18 +90,6 @@ export const exerciseUpdating = (content) => {
     
 }
 
-export const getOneExercise = (id) => {
-    return async (dispatch) => {
-        const exercise = await exerciseService.getOne(id)
-
-        console.log('HAETAAN ' + exercise)
-        
-        dispatch({
-            type: 'ONE_EXERCISE',
-            data: exercise
-        })
-    }
-}
 
 export const exerciseInitialization = () => {
     return async (dispatch) => {
@@ -105,13 +98,27 @@ export const exerciseInitialization = () => {
         
         /* const exercisesArray = Object.values(exercises)
         console.log(exercisesArray)
-         */
-        dispatch(getAllRequest(exercises))
-        /* dispatch({
-            type: 'EXERCISES',
-            data: exercisesArray
+        */
+       dispatch(getAllRequest(exercises))
+       /* dispatch({
+           type: 'EXERCISES',
+           data: exercisesArray
         }) */
     }
 }
 
+export const getOneExercise = (id) => {
+    return async (dispatch) => {
+        const exercise = await exerciseService.getOne(id)
+        console.log('HAETAAN ' + exercise)
+        dispatch(getOneRequest(exercise))
+    }
+}
+
+export const filterBySport = (sport) => {
+    return async (dispatch) => {
+        const exercises = await exerciseService.getAllBySport(sport)
+        dispatch(getAllBySportRequest(exercises))
+    }
+}
 export default reducer

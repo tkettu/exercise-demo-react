@@ -13,42 +13,41 @@ import Tab3 from './Tab3'
 import { userConstants } from '../constants/user.constants';
 import Logout from '../_helpers/Logout';
 
+const ExerciseMenu = () => (
+  <Menu.Item as={Link} to="/exercises">
+    harjoitukset
+  </Menu.Item>
+)
 
 const UserMenu = () => (
   <Menu.Menu position="right">
-    <Menu.Item>
+    <Menu.Item >
       {JSON.parse((window.localStorage
         .getItem(userConstants.LOCAL_STORAGE))).username}
     </Menu.Item>
     <Menu.Item as={Link} to="/logout" >
-        logout
+        kirjaudu ulos
     </Menu.Item>
   </Menu.Menu>
 )
 
 
+//TODO ROUTING TO /lajit/laji/{laji} that render by sport
+
 const MainMenu = () => (
   <div>
     <Menu inverted>
       <Menu.Item as={Link} to="/" >
-        home
+        koti
       </Menu.Item>
-      <Menu.Item as={Link} to="/exercises" >
-        Exercises
-      </Menu.Item>
-      <Menu.Item as={Link} to="/tab2" >
-        T2
-      </Menu.Item>
-      <Menu.Item as={Link} to="/tab3" >
-        T3
-      </Menu.Item>
-      
-
-      {window.localStorage.getItem(userConstants.LOCAL_STORAGE) ? 
-        <UserMenu />
+      {window.localStorage.getItem(userConstants.LOCAL_STORAGE) ?
+          <React.Fragment>
+            <ExerciseMenu />,
+            <UserMenu />
+          </React.Fragment>
         :
         <Menu.Item position="right" as={Link} to="/login" >
-        login
+          kirjaudu
         </Menu.Item>
       }
       
@@ -61,6 +60,7 @@ const MainMenu = () => (
 
       {/*placeholders*/}
       <Route path="/exercises" render={() => <Exercises />} />
+      {/* <Route path={`/exercises/laji/:sport`} render={(sport) => <Exercises sport />} /> */}
       <Route path="/tab2" render={() => <Tab2 />} />
       <Route path="/tab3" render={() => <Tab3 />} />
     </div> 

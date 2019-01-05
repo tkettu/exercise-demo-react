@@ -5,38 +5,32 @@ const baseUrl = '/api/exercises'
 
 let token = null
 
-
 const getConfig = () => {
     
     try {
         token = localStorage.getItem('user')    
-    } catch (error) {
-        
+    } catch (error) { 
     }
-
     const config  = {
         headers: {'Authorization': "Bearer " + token}
     }
 
-    console.log(config)
-    
     return config
 }
 
-const getAll = async () => {
+//----ALL GETS---
+const getBase = async ( url ) => {
 
-    const response = await axios.get(baseUrl, getConfig())
-     
-    return response.data   
-}
-
-const getOne = async ( id ) => {
-
-    const response = await axios.get(`${baseUrl}/${id}`, getConfig())
-    console.log(response.data)
-    
+    const response = await axios.get(url, getConfig())
     return response.data
 }
+
+const getAll = () => { return getBase(baseUrl) }
+
+const getAllBySport = ( sport ) => { return getBase(`${baseUrl}/sport/${sport}`) }
+
+const getOne = ( id ) => { return getBase(`${baseUrl}/${id}`)}
+//----END GETS---
 
 const addNew = async ( content ) => {
 
@@ -58,4 +52,5 @@ const updateExercise = async ({ id, content }) => {
     return response.data
 }
 
-export default { getAll, addNew, deleteExercise, updateExercise, getOne }
+export default { getAll, getOne, getAllBySport,
+                addNew, deleteExercise, updateExercise  }
