@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Route, Link, NavLink } from 'react-router-dom'
+import { Route, Link, NavLink, Switch } from 'react-router-dom'
 import { Menu } from 'semantic-ui-react'
 
 import LoginForm from './LoginForm'
@@ -10,13 +10,16 @@ import Home from './Home'
 import Exercises from './Exercises'
 import Tab2 from './Tab2'
 import Tab3 from './Tab3'
-import { userConstants } from '../constants/user.constants';
-import Logout from '../_helpers/Logout';
+import { userConstants } from '../constants/user.constants'
+import Logout from '../_helpers/Logout'
 
 const ExerciseMenu = () => (
-  <Menu.Item as={Link} to="/exercises">
-    harjoitukset
-  </Menu.Item>
+  <Menu.Menu>
+
+    <Menu.Item as={Link} to="/exercises">
+      harjoitukset
+    </Menu.Item>
+  </Menu.Menu>
 )
 
 const UserMenu = () => (
@@ -53,16 +56,23 @@ const MainMenu = () => (
       
     </Menu>
     <div>
-      <Route exact path="/" render={() => <Home />} />
-      <Route path="/login" render={({ history }) => <LoginForm history={history} />} />
-      <Route path="/register" render={() => <RegisterForm />} />
-      <Route path="/logout" render={() =>  <Logout /> } />
+      <Switch>
+        <Route exact path="/" render={() => <Home />} />
+        <Route path="/login" render={({ history }) => <LoginForm history={history} />} />
+        <Route path="/register" render={() => <RegisterForm />} />
+        <Route path="/logout" render={() =>  <Logout /> } />
 
-      {/*placeholders*/}
-      <Route path="/exercises" render={() => <Exercises />} />
-      {/* <Route path={`/exercises/laji/:sport`} render={(sport) => <Exercises sport />} /> */}
-      <Route path="/tab2" render={() => <Tab2 />} />
-      <Route path="/tab3" render={() => <Tab3 />} />
+        {/*placeholders*/}
+        <Route exact
+            path="/harjoitukset/laji/:sport?" 
+            render={({match}) =>  
+              <Exercises sport={match.params.sport} />
+            }  />
+        <Route  path="/harjoitukset" render={() => <Exercises />} />
+        <Route path="/tab2" render={() => <Tab2 />} />
+        <Route path="/tab3" render={() => <Tab3 />} />
+
+      </Switch>
     </div> 
   </div>
 )

@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { connect } from 'react-redux'
+import { withRouter, Redirect } from 'react-router-dom'
 import { exerciseInitialization, getOneExercise, 
   exerciseRemoving, filterBySport } from '../reducers/exerciseReducer'
 import store from '../store'
@@ -72,6 +73,7 @@ const ExerciseTable = ({ handleSort, column, data, direction, modifyExercise, de
 
 
   const options = [
+    { key: 'ALL', text: 'Kaikki', value: ''  },
     { key: 'RUN', text: 'Juoksu', value: 'Juoksu' },
     { key: 'SKI', text: 'Hiihto', value: 'Hiihto' },
     { key: 'WAL', text: 'Kävely', value: 'Kävely' }
@@ -89,7 +91,7 @@ const Filter = ({ handleSportChange }) => (
 
 
 class Exercises extends React.Component {
-  constructor(props) {
+  constructor(props){
     super(props)
     this.state = {
       column: null,
@@ -101,10 +103,13 @@ class Exercises extends React.Component {
   }
 
    componentWillMount = async () => {
-
-    console.log(this.props.sport)
-    
-    await this.props.exerciseInitialization()
+    //TODO do this at one initialization, with sport param
+    // If null/undefined -> All, otherwise sport
+    if (this.props.sport){
+      await this.props.filterBySport(this.props.sport)
+    }else {
+      await this.props.exerciseInitialization()
+    }
     
     this.setState({ data: this.props.exercises})
     
@@ -115,6 +120,15 @@ class Exercises extends React.Component {
               data: _.sortBy(data, [exerciseConstants.INITIAL_SORT_COLUMN]).reverse() 
             }) 
   } 
+
+  componentWillUpdate = () => {
+    console.log('WILL UPDATE')
+    
+  }
+
+  componentWillReceiveProps = () => {
+    console.log('DID RECEIEV PROPS')
+  }
 
   handleSort = clickedColumn => () => {
     const { column, data, direction } = this.state
@@ -164,7 +178,14 @@ class Exercises extends React.Component {
   handleSportChange = async (e, { value }) => {
     console.log(`UUSI SPORTTI ${value}`)
     
-    const exercises = await this.props.filterBySport(value)
+    if (value === '') {
+      this.props.history.push(`/harjoitukset`)
+      await this.props.exerciseInitialization()  
+    }else {
+      this.props.history.push(`/harjoitukset/laji/${value}`)
+      await this.props.filterBySport(value)
+    }
+    
     this.updateExerciseTable()
   }
 
@@ -193,13 +214,18 @@ class Exercises extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
+  console.log(ownProps)
+  console.log(state)
+  
   return {
-    exercises: store.getState().exerciseReducer
+    exercises: store.getState().exerciseReducer,
+    sport: ownProps.sport
   }
 }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
-  { exerciseInitialization, getOneExercise, exerciseRemoving, filterBySport }
-)(Exercises)
+  { exerciseInitialization, getOneExercise, 
+    exerciseRemoving, filterBySport }
+)(Exercises))
