@@ -65,10 +65,11 @@ export const login = ({username, password}) => {
           history.push('/')
           console.log(user)
           
-          localStorage.setItem('user', user.accessToken)
+          localStorage.setItem('user', user.userName)
+          localStorage.setItem('userToken', user.accessToken)
           const token = parseJwt(user.accessToken)
 
-          dispatch(successMsg(`Tervetuloa ${token.sub}`))
+          dispatch(successMsg(`Tervetuloa ${user.userName}`))
           //dispatch(exerciseInitialization())
           setTimeout(() => {
             dispatch(clearMsg())

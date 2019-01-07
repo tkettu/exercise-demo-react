@@ -18,8 +18,10 @@ const reducer = (state = [], action) => {
             if (index === -1) return state
             const newState = state.slice(0, index).concat(state.slice(index+1, state.length))
             return newState
-        case 'UPDATE_EXERCISE':
-            break            
+        case exerciseConstants.UPDATE_REQUEST:
+            //TODO return table with updated exerice
+            return state
+            
         default:
             return state
     }
@@ -41,6 +43,7 @@ const getAllBySportRequest = (exercises) => ({
 
 const deleteRequest = (id) => ({ type: exerciseConstants.DELETE_REQUEST, data: id })
 
+const updateRequest = (id) => ({ type: exerciseConstants.UPDATE_REQUEST, data: id })
 
 /* export const exerciseCreation = (content) => {
 
@@ -75,8 +78,6 @@ export const exerciseCreation = (content) => {
     }
 }
 
-
-
 export const exerciseRemoving = (id) => {
     return async (dispatch) => {
 
@@ -86,24 +87,26 @@ export const exerciseRemoving = (id) => {
     }
 }
 
-export const exerciseUpdating = (content) => {
+export const exerciseUpdating = ( id, content ) => {
+    console.log(content)
     
+    
+    console.log(`Updating ${id} to ${content}` )
+    
+     return async (dispatch) => {
+        const response = await exerciseService.updateExercise(id, content)
+        dispatch(updateRequest(id))
+    } 
+
 }
 
 
 export const exerciseInitialization = () => {
     return async (dispatch) => {
         const exercises = await exerciseService.getAll()
-        //console.log(`EXERCISESIT ${exercises}`)
-        
-        /* const exercisesArray = Object.values(exercises)
-        console.log(exercisesArray)
-        */
-       dispatch(getAllRequest(exercises))
-       /* dispatch({
-           type: 'EXERCISES',
-           data: exercisesArray
-        }) */
+      
+        dispatch(getAllRequest(exercises))
+      
     }
 }
 

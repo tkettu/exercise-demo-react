@@ -17,6 +17,7 @@ export const exerciseConstants = {
 
     DELETE_REQUEST: 'DELETE_EXERCISE',
     
+    UPDATE_REQUEST: 'UPDATE_EXERCISE',
 
     INITIAL_SORT_COLUMN: 'date',
 }

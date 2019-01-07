@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { connect } from 'react-redux'
-import { withRouter, Redirect } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { exerciseInitialization, getOneExercise, 
   exerciseRemoving, filterBySport } from '../reducers/exerciseReducer'
 import store from '../store'
@@ -88,7 +88,13 @@ const Filter = ({ handleSportChange }) => (
   </Segment>
 )
 
-
+const ModifyExercise = ({exercise}) => {
+  console.log(exercise)
+  if (exercise === null) return <div></div>
+  return (
+    <ExerciseForm content={exercise} />
+  )
+}
 
 class Exercises extends React.Component {
   constructor(props){
@@ -97,14 +103,22 @@ class Exercises extends React.Component {
       column: null,
       data: [],
       direction: null,
-      sport: ''
+      sport: '',
+      exercise: null
     }
+
+    console.log('CONSTRUCTORIISSA')
+    
+    console.log(this.props)
+    
     
   }
 
    componentWillMount = async () => {
     //TODO do this at one initialization, with sport param
     // If null/undefined -> All, otherwise sport
+    console.log('WILL MOUNT');
+    
     if (this.props.sport){
       await this.props.filterBySport(this.props.sport)
     }else {
@@ -117,18 +131,15 @@ class Exercises extends React.Component {
     //Initial sorting by user VARIABLE
     this.setState({ 
               column: exerciseConstants.INITIAL_SORT_COLUMN, 
-              data: _.sortBy(data, [exerciseConstants.INITIAL_SORT_COLUMN]).reverse() 
+              data: _.sortBy(data, [exerciseConstants.INITIAL_SORT_COLUMN]).reverse(),
+              sport: this.props.sport 
             }) 
   } 
 
   componentWillUpdate = () => {
     console.log('WILL UPDATE')
-    
   }
 
-  componentWillReceiveProps = () => {
-    console.log('DID RECEIEV PROPS')
-  }
 
   handleSort = clickedColumn => () => {
     const { column, data, direction } = this.state
@@ -155,28 +166,30 @@ class Exercises extends React.Component {
     const exercise = await this.props.getOneExercise(id)
     
     console.log(exercise)
-    
-    //TODO Tämä Omaansa
-    //const deletedEx = await this.props.exerciseRemoving(id)
-    
+    console.log(this.props.exercises)
+    this.setState({ exercise: this.props.exercises })
   }
 
   updateExerciseTable = () => {
     this.setState({ data: this.props.exercises })
     const { data, column } = this.state
 
-    //Put new exercise in its own place, by user (or default) sorted column
+    //Re-sort exercise table after change, by user (or default) sorted column
     this.setState({ data: _.sortBy(data, [column]) })
   }
 
   deleteExercise = (id) => async () => {
     
-    const deletedEx =  await this.props.exerciseRemoving(id)
+    await this.props.exerciseRemoving(id)
+    this.updateExerciseTable()
+  }
+
+  handleChange = async (sport) => {
+    await this.props.filterBySport(sport)
     this.updateExerciseTable()
   }
 
   handleSportChange = async (e, { value }) => {
-    console.log(`UUSI SPORTTI ${value}`)
     
     if (value === '') {
       this.props.history.push(`/harjoitukset`)
@@ -184,21 +197,34 @@ class Exercises extends React.Component {
     }else {
       this.props.history.push(`/harjoitukset/laji/${value}`)
       await this.props.filterBySport(value)
-    }
-    
+    } 
     this.updateExerciseTable()
   }
 
   render() {
-   
     const { column, data, direction } = this.state
+
+    if(this.state.sport!==this.props.sport){
+      
+      console.log('EI OLLU SAMAT ')
+      
+      /* console.log('UPDATING')
+      //TODO toimii, mutta ei ole oikein, puhdasta eikä turvallista, koska setstate renderissä
+      this.setState({sport: this.props.sport})
+      this.handleChange(this.props.sport) */
+    }
+    console.log(this.state.sport)
+    
+    
+    
     return (
       <div>
+        <Filter handleSportChange={this.handleSportChange}/>
+        <ModifyExercise exercise={this.state.exercise}/>
         <Togglable buttonLabel="Lisää harjoitus">
           <ExerciseForm handleSubmit={this.updateExerciseTable}/>
         </Togglable>
         <Togglable buttonLabel="Yhteenveto">
-          <Filter handleSportChange={this.handleSportChange}/>
           <SummaryTable data={data} />
         </Togglable>
        
@@ -207,7 +233,6 @@ class Exercises extends React.Component {
           modifyExercise={this.modifyExercise}
           deleteExercise={this.deleteExercise}
         />
-        
       </div>
     )
 
@@ -215,9 +240,6 @@ class Exercises extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(ownProps)
-  console.log(state)
-  
   return {
     exercises: store.getState().exerciseReducer,
     sport: ownProps.sport

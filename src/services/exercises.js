@@ -8,7 +8,7 @@ let token = null
 const getConfig = () => {
     
     try {
-        token = localStorage.getItem('user')    
+        token = localStorage.getItem('userToken')    
     } catch (error) { 
     }
     const config  = {
@@ -46,7 +46,7 @@ const deleteExercise = async (id) => {
     return response.data
 }
 
-const updateExercise = async ({ id, content }) => {
+const updateExercise = async ( id, content ) => {
 
     const response = await axios.put(`${baseUrl}/${id}`, content, getConfig())
     return response.data
