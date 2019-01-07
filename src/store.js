@@ -4,9 +4,11 @@ import thunk from 'redux-thunk'
 import loginReducer from './reducers/loginReducer'
 import messageReducer from './reducers/messageReducer'
 import exerciseReducer from './reducers/exerciseReducer'
+import userReducer from './reducers/userReducer'
 
 const reducer = combineReducers({
   loginReducer,
+  userReducer,
   messageReducer,
   exerciseReducer
 })

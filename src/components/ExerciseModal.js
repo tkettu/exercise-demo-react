@@ -7,25 +7,50 @@ const initStyle = {
     modal: {
         top: '0',
         position: 'absolute',
-        marginbottom: '1px',
+        
     }
+    
 }
 
-const ExerciseModal = () => (
-    <Modal trigger={<Button>Lisää harjoitus</Button>}  style={initStyle.modal}  >
+const FormModal = ({ handleOpen, handleClose, modalOpen, content, name }) => (
+  <Modal  trigger={<Button onClick={handleOpen}>{name}</Button>}  
+        style={initStyle.modal}
+        open={modalOpen}
+        onClose={handleClose}
+        >
       <Header icon='archive' content='Lisää uusi harjoitus' />
       <Modal.Content>
-        <ExerciseForm />
-        {/* <Form>
-          <Form.Select label='Laji' options={options}/>
-          <Form.Input label='Matka' type='number' min={0}  placeholder={0} />
-          <Form.Input label='Tunnit' type='number' min={0} placeholder={0} />
-          <Form.Input label='Minuutit' type='number' min={0} max={59} placeholder={0} />
-          <Form.Input label='Päivä' type='date' />
-        </Form> */} 
+        <ExerciseForm handleSubmit={handleClose} content={content}/>
+         
       </Modal.Content>
       
     </Modal>
 )
+
+class ExerciseModal extends React.Component {
+  constructor(props){
+    super(props)
+
+    console.log(props)
+    console.log('TASSA OLLAAN')
+    this.state = { modalOpen : false }
+  }
+
+  handleOpen = () => this.setState({ modalOpen: true })
+  handleClose = () => this.setState({ modalOpen: false })
+  
+  render() {
+    return (
+      <FormModal 
+        handleOpen={this.handleOpen} 
+        handleClose={this.handleClose}
+        modalOpen={this.state.modalOpen}
+        content={this.props.content}
+        name={this.props.name} />
+    )
+  }
+}
+
+
 
 export default ExerciseModal

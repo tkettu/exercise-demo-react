@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 //import { BrowserRouter as Router } from 'react-router-dom'
-import { Router } from 'react-router-dom'
+import { BrowserRouter, Router } from 'react-router-dom'
 import { Container } from 'semantic-ui-react'
 
 import './App.css'
@@ -16,15 +16,10 @@ class App extends Component {
     super(props)
 
     history.listen((location, action) => {
-      console.log('CLEARETAAN MESSAGET ')
-      
       props.clearMsg()
     })
   }
-  componentDidMount = () => {
-    //console.log(store.getState())
-    
-  }
+
   render() {
     return (
       <Container>   
