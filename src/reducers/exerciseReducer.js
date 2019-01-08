@@ -5,23 +5,26 @@ import { errorMsg, successMsg, clearMsg } from './messageReducer'
 const timeout = 5000
 
 const reducer = (state = [], action) => {
+    console.log(action.data)
+    console.log(state)
+    
     switch (action.type) {
+        
         case exerciseConstants.GET_ALL_REQUEST:
-        case exerciseConstants.GET_ONE_REQUEST:
         case exerciseConstants.GET_SPORTS_REQUEST:
-            return action.data
-
+        case exerciseConstants.GET_ONE_REQUEST:
+             return action.data
         case exerciseConstants.ADD_NEW_REQUEST:
             return [...state, action.data]
         case exerciseConstants.DELETE_REQUEST:
             const index = state.findIndex(e => e.id === action.data)
             if (index === -1) return state
-            const newState = state.slice(0, index).concat(state.slice(index+1, state.length))
+            const newState = state.slice(0, index).concat(state.slice(index+1, state.length)) 
             return newState
         case exerciseConstants.UPDATE_REQUEST:
-            //TODO return table with updated exerice
-            return state
-            
+            const updatedExercise = action.data.exercise
+            const id = updatedExercise.id
+            return state.map(exercise => exercise.id !== id ? exercise : updatedExercise)
         default:
             return state
     }
@@ -43,7 +46,8 @@ const getAllBySportRequest = (exercises) => ({
 
 const deleteRequest = (id) => ({ type: exerciseConstants.DELETE_REQUEST, data: id })
 
-const updateRequest = (id) => ({ type: exerciseConstants.UPDATE_REQUEST, data: id })
+const updateRequest = (exercise) => ({ type: exerciseConstants.UPDATE_REQUEST, 
+                                            data: { exercise: exercise } })
 
 /* export const exerciseCreation = (content) => {
 
@@ -94,8 +98,8 @@ export const exerciseUpdating = ( id, content ) => {
     console.log(`Updating ${id} to ${content}` )
     
      return async (dispatch) => {
-        const response = await exerciseService.updateExercise(id, content)
-        dispatch(updateRequest(id))
+        const exercise = await exerciseService.updateExercise(id, content)
+        dispatch(updateRequest(exercise))
     } 
 
 }

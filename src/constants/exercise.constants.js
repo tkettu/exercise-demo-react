@@ -20,4 +20,6 @@ export const exerciseConstants = {
     UPDATE_REQUEST: 'UPDATE_EXERCISE',
 
     INITIAL_SORT_COLUMN: 'date',
+
+    DATE_FORMAT: 'DD.MM.YYYY',
 }

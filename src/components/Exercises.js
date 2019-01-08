@@ -2,11 +2,12 @@ import React from 'react'
 
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { exerciseInitialization, getOneExercise, 
-  exerciseRemoving, filterBySport } from '../reducers/exerciseReducer'
+import {
+  exerciseInitialization, getOneExercise,
+  exerciseRemoving, filterBySport
+} from '../reducers/exerciseReducer'
 import store from '../store'
 import Moment from 'react-moment'
-import moment from 'moment'
 import _ from 'lodash'
 import { Table, Icon, Segment, Form } from 'semantic-ui-react'
 import ExerciseForm from './ExerciseForm'
@@ -14,8 +15,13 @@ import Togglable from './Togglable'
 import { exerciseConstants } from '../constants/exercise.constants'
 import SummaryTable from './SummaryTable';
 
-
-const ExerciseTable = ({ handleSort, column, data, direction, modifyExercise, deleteExercise }) => (
+/**
+ * Shows sortable table of exercises
+ * @author Tero Kettunen
+ * @param {*} param0 
+ */
+const ExerciseTable = ({ handleSort, column, data, direction,
+  modifyExercise, deleteExercise }) => (
 
     <Table sortable celled fixed>
       <Table.Header>
@@ -45,8 +51,7 @@ const ExerciseTable = ({ handleSort, column, data, direction, modifyExercise, de
           >
             Päivä
       </Table.HeaderCell>
-      <Table.HeaderCell>viikko</Table.HeaderCell>
-      <Table.HeaderCell width={1}></Table.HeaderCell>
+          <Table.HeaderCell width={1}></Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -60,11 +65,8 @@ const ExerciseTable = ({ handleSort, column, data, direction, modifyExercise, de
                 {date}
               </Moment>
             </Table.Cell>
-            <Table.Cell>
-              {moment(date).isoWeek()}
-            </Table.Cell>
             <Table.Cell onClick={deleteExercise(id)}><Icon name='delete' /></Table.Cell>
-            
+
           </Table.Row>
         ))}
       </Table.Body>
@@ -72,11 +74,11 @@ const ExerciseTable = ({ handleSort, column, data, direction, modifyExercise, de
   )
 
 
-  const options = [
-    { key: 'ALL', text: 'Kaikki', value: ''  },
-    { key: 'RUN', text: 'Juoksu', value: 'Juoksu' },
-    { key: 'SKI', text: 'Hiihto', value: 'Hiihto' },
-    { key: 'WAL', text: 'Kävely', value: 'Kävely' }
+const options = [
+  { key: 'ALL', text: 'Kaikki', value: '' },
+  { key: 'RUN', text: 'Juoksu', value: 'Juoksu' },
+  { key: 'SKI', text: 'Hiihto', value: 'Hiihto' },
+  { key: 'WAL', text: 'Kävely', value: 'Kävely' }
 ]
 
 const Filter = ({ handleSportChange }) => (
@@ -88,16 +90,16 @@ const Filter = ({ handleSportChange }) => (
   </Segment>
 )
 
-const ModifyExercise = ({exercise}) => {
+const ModifyExercise = ({ exercise, handleSubmit }) => {
   console.log(exercise)
   if (exercise === null) return <div></div>
   return (
-    <ExerciseForm content={exercise} />
+    <ExerciseForm content={exercise} handleSubmit={handleSubmit}/>
   )
 }
 
 class Exercises extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props)
     this.state = {
       column: null,
@@ -106,35 +108,27 @@ class Exercises extends React.Component {
       sport: '',
       exercise: null
     }
-
-    console.log('CONSTRUCTORIISSA')
-    
-    console.log(this.props)
-    
-    
   }
 
-   componentWillMount = async () => {
-    //TODO do this at one initialization, with sport param
+  componentWillMount = async () => {
+  
     // If null/undefined -> All, otherwise sport
-    console.log('WILL MOUNT');
-    
-    if (this.props.sport){
+    if (this.props.sport) {
       await this.props.filterBySport(this.props.sport)
-    }else {
+    } else {
       await this.props.exerciseInitialization()
     }
-    
-    this.setState({ data: this.props.exercises})
-    
-    const  { data } = this.state
+
+    this.setState({ data: this.props.exercises })
+
+    const { data } = this.state
     //Initial sorting by user VARIABLE
-    this.setState({ 
-              column: exerciseConstants.INITIAL_SORT_COLUMN, 
-              data: _.sortBy(data, [exerciseConstants.INITIAL_SORT_COLUMN]).reverse(),
-              sport: this.props.sport 
-            }) 
-  } 
+    this.setState({
+      column: exerciseConstants.INITIAL_SORT_COLUMN,
+      data: _.sortBy(data, [exerciseConstants.INITIAL_SORT_COLUMN]).reverse(),
+      sport: this.props.sport
+    })
+  }
 
   componentWillUpdate = () => {
     console.log('WILL UPDATE')
@@ -144,7 +138,7 @@ class Exercises extends React.Component {
   handleSort = clickedColumn => () => {
     const { column, data, direction } = this.state
     //data = this.props.exercises
-    
+
     if (column !== clickedColumn) {
       this.setState({
         column: clickedColumn,
@@ -161,13 +155,11 @@ class Exercises extends React.Component {
     })
   }
 
-  modifyExercise = ( id ) =>  async () => {
-   
-    const exercise = await this.props.getOneExercise(id)
-    
-    console.log(exercise)
-    console.log(this.props.exercises)
-    this.setState({ exercise: this.props.exercises })
+  modifyExercise = (id) => async () => {
+    const oneExer = this.state.data.find(n => n.id === id)
+    // const exercise = await this.props.getOneExercise(id)
+    //this.setState({ exercise: this.props.exercises })
+    this.setState({ exercise: oneExer })
   }
 
   updateExerciseTable = () => {
@@ -178,8 +170,13 @@ class Exercises extends React.Component {
     this.setState({ data: _.sortBy(data, [column]) })
   }
 
+  updateExercise = () => {
+     this.updateExerciseTable()
+     this.setState({ exercise: null })
+  }
+
   deleteExercise = (id) => async () => {
-    
+
     await this.props.exerciseRemoving(id)
     this.updateExerciseTable()
   }
@@ -190,44 +187,39 @@ class Exercises extends React.Component {
   }
 
   handleSportChange = async (e, { value }) => {
-    
+
     if (value === '') {
       this.props.history.push(`/harjoitukset`)
-      await this.props.exerciseInitialization()  
-    }else {
+      await this.props.exerciseInitialization()
+    } else {
       this.props.history.push(`/harjoitukset/laji/${value}`)
       await this.props.filterBySport(value)
-    } 
+    }
     this.updateExerciseTable()
   }
 
   render() {
     const { column, data, direction } = this.state
 
-    if(this.state.sport!==this.props.sport){
-      
-      console.log('EI OLLU SAMAT ')
-      
-      /* console.log('UPDATING')
-      //TODO toimii, mutta ei ole oikein, puhdasta eikä turvallista, koska setstate renderissä
-      this.setState({sport: this.props.sport})
+    if (this.state.sport !== this.props.sport) {
+
+      //FIXME: toimii, mutta ei ole oikein, puhdasta eikä turvallista, koska setstate renderissä
+      /*this.setState({sport: this.props.sport})
       this.handleChange(this.props.sport) */
     }
-    console.log(this.state.sport)
-    
-    
-    
+
+    //TODO: notifications
     return (
       <div>
-        <Filter handleSportChange={this.handleSportChange}/>
-        <ModifyExercise exercise={this.state.exercise}/>
+        <Filter handleSportChange={this.handleSportChange} />
+        <ModifyExercise exercise={this.state.exercise} handleSubmit={this.updateExercise}  />
         <Togglable buttonLabel="Lisää harjoitus">
-          <ExerciseForm handleSubmit={this.updateExerciseTable}/>
+          <ExerciseForm handleSubmit={this.updateExerciseTable} />
         </Togglable>
         <Togglable buttonLabel="Yhteenveto">
           <SummaryTable data={data} />
         </Togglable>
-       
+
         <ExerciseTable handleSort={this.handleSort}
           column={column} data={data} direction={direction}
           modifyExercise={this.modifyExercise}
@@ -240,6 +232,8 @@ class Exercises extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
+  console.log(store.getState())
+  
   return {
     exercises: store.getState().exerciseReducer,
     sport: ownProps.sport
@@ -248,6 +242,8 @@ const mapStateToProps = (state, ownProps) => {
 
 export default withRouter(connect(
   mapStateToProps,
-  { exerciseInitialization, getOneExercise, 
-    exerciseRemoving, filterBySport }
+  {
+    exerciseInitialization, getOneExercise,
+    exerciseRemoving, filterBySport
+  }
 )(Exercises))

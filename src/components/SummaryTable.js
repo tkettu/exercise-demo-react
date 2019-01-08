@@ -91,6 +91,10 @@ const Summary = ({ data }) => {
     return <WeekSummary weekData={weekSummary} />
 }
 
+
+/**
+ * Shows weekly totals (distance, time) of data (exercises)
+ */
 class SummaryTable extends React.Component {
 
     render() {
