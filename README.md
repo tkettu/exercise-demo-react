@@ -1,10 +1,30 @@
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
-You can find the most recent version of guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
+## Johdanto
 
-## Intoduction
+Demo-projektin frontend Code bootcampille.
+Projekti on react-sovellus, jossa on käytetty mm. reduxia ja semantic-ui:tä.
 
-This is base of the react app using semantic-ui, redux and including fake-backend for testing. App includes user handling operations; registering and logging in.
+## Esittely
+
+Sovelluksen pääkomponenttina toimii Exercises, missä voidaan lisätä ja muokata entiteettejä (harjoituksia) ExerciseForm-komponentissa. Lisäksi samassa näkymässä on nähtävillä SummaryTable, joka summaa esimerkiksi viikottain kertyneen matkan.
+
+Lisäksi sovellukseen on toteutettu Rekisteröinti ja Kirjautumis toiminnot.
+
+## TODOS
+
+- Ilmoitukset ja virheviestit harjoitusten lisäämisiin, muokkaamisiin ja poistamisiin
+- Virheiden käsittely edellä mainittuihin
+- Yhteenvetoja lisää, mm. kuukausittaiset ja kausittaiset matkat
+- Ajan yhteistuloksen laskeminen
+- matka-aika yms. graafit
+
+## Backend
+
+Backendin toteutus löytyy  [githubista](https://github.com/tkettu/exercise-demo-back)
+
+##English
+## Introduction
+This is demo react frontend app for Code bootcamp using semantic-ui and redux.
 
 ## Requirements
 
@@ -15,14 +35,11 @@ Npm and Git
 Fork and clone project to local machine, then install required packages.
 
 ```sh
-git clone https://github.com/<USER-NAME>/base-react-redux.
+git clone https://github.com/<USER-NAME>/exercise-demo-react.
 cd base-react-redux
 npm install
 ```
 and verify that working
-````sh
-npm run server-auth
-````
 ````sh
 npm start
 ````
