@@ -25,6 +25,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
+  "proxy": "https://exercise-demo.herokuapp.com/",
   "browserslist": [
     ">0.2%",
     "not dead",

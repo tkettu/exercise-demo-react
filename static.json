@@ -6,7 +6,7 @@
     "https_only": true,
     "proxies": {
       "/api/": {
-        "origin": "https://exercise-demo.herokuapp.com/"
+        "origin": "https://exercise-demo.herokuapp.com/api/"
       }
     }
   }
