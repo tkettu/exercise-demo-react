@@ -26,9 +26,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "heroku-postbuild": "npm run build",
-    "server": "json-server -p3001 db.json",
-    "server-auth": "node server/server.js"
+    "heroku-postbuild": "npm run build"
   },
   "proxy": "https://exercise-demo.herokuapp.com/",
   "browserslist": [
