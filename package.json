@@ -28,7 +28,6 @@
     "eject": "react-scripts eject",
     "heroku-postbuild": "npm run build"
   },
-  "proxy": "https://exercise-demo.herokuapp.com/",
   "browserslist": [
     ">0.2%",
     "not dead",
