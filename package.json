@@ -20,14 +20,11 @@
     "serve": "^10.1.1"
   },
   "scripts": {
-    "dev": "react-scripts start",
-    "start": "serve -s build",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "heroku-postbuild": "npm run build"
+    "eject": "react-scripts eject"
   },
-  "proxy": "https://exercise-demo.herokuapp.com/",
   "browserslist": [
     ">0.2%",
     "not dead",
