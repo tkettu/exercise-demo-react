@@ -5,6 +5,7 @@ const Home = () => (
   <div>
     <Notification />
     KOTI
+    {}
   </div>
 )
 

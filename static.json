@@ -3,9 +3,10 @@
     "routes": {
       "/**": "index.html"
     },
+    "https_only": true,
     "proxies": {
       "/api/": {
-        "origin": "${API_URL}"
+        "origin": "https://exercise-demo.herokuapp.com/"
       }
     }
   }
