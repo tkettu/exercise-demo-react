@@ -13,12 +13,14 @@ import { Table, Icon, Segment, Form } from 'semantic-ui-react'
 import ExerciseForm from './ExerciseForm'
 import Togglable from './Togglable'
 import { exerciseConstants } from '../constants/exercise.constants'
-import SummaryTable from './SummaryTable';
+import SummaryTable from './SummaryTable'
+import { formatHoursMinutes} from '../_helpers/timehandlers'
 
 /**
- * Shows sortable table of exercises
+ * Returns sortable table of exercises
  * @author Tero Kettunen
- * @param {*} param0 
+ * @param {string} column to be sorted
+ * @param {*} data to be show at table 
  */
 const ExerciseTable = ({ handleSort, column, data, direction,
   modifyExercise, deleteExercise }) => (
@@ -34,7 +36,6 @@ const ExerciseTable = ({ handleSort, column, data, direction,
       </Table.HeaderCell>
           <Table.HeaderCell
             sorted={column === 'distance' ? direction : null}
-            // onClick={this.handleSort('age')}
             onClick={handleSort('distance')}
           >
             Matka
@@ -59,7 +60,7 @@ const ExerciseTable = ({ handleSort, column, data, direction,
           <Table.Row key={id}>
             <Table.Cell onClick={modifyExercise(id)}>{sport}</Table.Cell>
             <Table.Cell>{distance}</Table.Cell>
-            <Table.Cell>{hours}:{minutes}</Table.Cell>
+            <Table.Cell>{formatHoursMinutes(hours, minutes)}</Table.Cell>
             <Table.Cell>
               <Moment format="DD.MM.YY">
                 {date}
@@ -91,7 +92,7 @@ const Filter = ({ handleSportChange }) => (
 )
 
 const ModifyExercise = ({ exercise, handleSubmit }) => {
-  console.log(exercise)
+  
   if (exercise === null) return <div></div>
   return (
     <ExerciseForm content={exercise} handleSubmit={handleSubmit}/>
@@ -111,13 +112,17 @@ class Exercises extends React.Component {
   }
 
   componentWillMount = async () => {
-  
+    
+    let title = 'harjoitukset'
     // If null/undefined -> All, otherwise sport
     if (this.props.sport) {
       await this.props.filterBySport(this.props.sport)
+      title = this.props.sport
     } else {
       await this.props.exerciseInitialization()
     }
+
+    document.title = title
 
     this.setState({ data: this.props.exercises })
 
@@ -130,10 +135,9 @@ class Exercises extends React.Component {
     })
   }
 
-  componentWillUpdate = () => {
-    console.log('WILL UPDATE')
+  componentWillUnmount = () => {
+    document.title = 'liikunnat'
   }
-
 
   handleSort = clickedColumn => () => {
     const { column, data, direction } = this.state

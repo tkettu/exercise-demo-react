@@ -2,6 +2,7 @@ import React from 'react'
 import moment from 'moment'
 import { Table } from 'semantic-ui-react'
 import _ from 'lodash'
+import { timeToString, hoursMinutesToTime } from '../_helpers/timehandlers'
 
 
 const WeekSummary = ({ weekData }) => (
@@ -9,19 +10,17 @@ const WeekSummary = ({ weekData }) => (
     <Table sortable celled fixed>
         <Table.Header>
             <Table.Row>
-                <Table.HeaderCell> Laji </Table.HeaderCell>
                 <Table.HeaderCell>Viikko</Table.HeaderCell>
                 <Table.HeaderCell>Matka</Table.HeaderCell>
                 <Table.HeaderCell>Aika</Table.HeaderCell>
             </Table.Row>
         </Table.Header>
         <Table.Body>
-            {_.map(weekData, ({ sport, week, total }) => (
+            {_.map(weekData, ({ sport, week, total, totalTime }) => (
                 <Table.Row key={sport+week}>
-                    <Table.Cell>{sport}</Table.Cell>
                     <Table.Cell>{week}</Table.Cell>
                     <Table.Cell>{total}</Table.Cell>
-                    <Table.Cell>AIKA TÄHÄN</Table.Cell>
+                    <Table.Cell>{timeToString(totalTime)}</Table.Cell>
                 </Table.Row>
             ))}
         </Table.Body>
@@ -38,10 +37,10 @@ const Summary = ({ data }) => {
         })).value()
 
     // add week and monthnumbers to individual exercise and
-    const weeks = _.map(data, ({ date, distance, time, sport }) => ({
+    const weeks = _.map(data, ({ date, distance, hours, minutes, sport }) => ({
         'sport': sport,
         'distance': distance,
-        'time': time,
+        'time': hoursMinutesToTime(hours, minutes),
         'weekAndYear': moment(date).isoWeek() + '/' + moment(date).year(),
         'monthAndYear': moment(data).month() + '/' + moment(date).year()
     }))
@@ -49,7 +48,8 @@ const Summary = ({ data }) => {
     const weekSummary = _(weeks).groupBy('weekAndYear')
             .map((values, key) => ({
                 'week': key,
-                'total': _.sumBy(values, 'distance')
+                'total': _.sumBy(values, 'distance'),
+                'totalTime': _.sumBy(values, 'time')
             })).value()
 
     // Group by sports

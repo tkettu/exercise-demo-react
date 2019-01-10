@@ -5,9 +5,7 @@ import { errorMsg, successMsg, clearMsg } from './messageReducer'
 const timeout = 5000
 
 const reducer = (state = [], action) => {
-    console.log(action.data)
-    console.log(state)
-    
+   
     switch (action.type) {
         
         case exerciseConstants.GET_ALL_REQUEST:
@@ -76,7 +74,6 @@ const updateRequest = (exercise) => ({ type: exerciseConstants.UPDATE_REQUEST,
 export const exerciseCreation = (content) => {
     return async (dispatch) => {
         const newExercise = await exerciseService.addNew(content)
-        console.log(newExercise)
         
         dispatch(addRequest(newExercise))
     }
@@ -92,11 +89,7 @@ export const exerciseRemoving = (id) => {
 }
 
 export const exerciseUpdating = ( id, content ) => {
-    console.log(content)
-    
-    
-    console.log(`Updating ${id} to ${content}` )
-    
+   
      return async (dispatch) => {
         const exercise = await exerciseService.updateExercise(id, content)
         dispatch(updateRequest(exercise))
@@ -117,7 +110,6 @@ export const exerciseInitialization = () => {
 export const getOneExercise = (id) => {
     return async (dispatch) => {
         const exercise = await exerciseService.getOne(id)
-        console.log('HAETAAN ' + exercise)
         dispatch(getOneRequest(exercise))
     }
 }

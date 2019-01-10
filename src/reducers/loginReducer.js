@@ -51,7 +51,7 @@ const parseJwt = (token) => {
 };
 
 export const login = ({username, password}) => {
-  console.log(username, password)
+ 
   const credentials = {username, password}
   return dispatch => {
 
@@ -63,7 +63,6 @@ export const login = ({username, password}) => {
         user => {
           dispatch(success(user))
           history.push('/')
-          console.log(user)
           
           localStorage.setItem('user', user.userName)
           localStorage.setItem('userToken', user.accessToken)

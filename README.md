@@ -6,7 +6,7 @@ Projekti on react-sovellus, jossa on käytetty mm. reduxia ja semantic-ui:tä.
 
 ## Esittely
 
-Sovelluksen pääkomponenttina toimii Exercises, missä voidaan lisätä ja muokata entiteettejä (harjoituksia) ExerciseForm-komponentissa. Lisäksi samassa näkymässä on nähtävillä SummaryTable, joka summaa esimerkiksi viikottain kertyneen matkan.
+Sovelluksen perustavanlaatuisena komponenttina toimii Exercises, missä voidaan lisätä ja muokata entiteettejä (harjoituksia) ExerciseForm-komponentissa. Lisäksi samassa näkymässä on nähtävillä ExerciseTable, missä käyttäjän lisäämät harjoitukset näkyvät taulukkomuodossa sekä SummaryTable, joka summaa esimerkiksi viikottain kertyneen matkan.
 
 Lisäksi sovellukseen on toteutettu Rekisteröinti ja Kirjautumis toiminnot.
 
@@ -18,11 +18,13 @@ Lisäksi sovellukseen on toteutettu Rekisteröinti ja Kirjautumis toiminnot.
 - Ajan yhteistuloksen laskeminen
 - matka-aika yms. graafit
 
+- Mobiili-yhteensopivuutta (Menu stackable, taulukot mobiilinäkyviksi)
+
 ## Backend
 
 Backendin toteutus löytyy  [githubista](https://github.com/tkettu/exercise-demo-back)
 
-##English
+## English
 ## Introduction
 This is demo react frontend app for Code bootcamp using semantic-ui and redux.
 

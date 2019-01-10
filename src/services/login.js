@@ -19,8 +19,7 @@ const login = async (credentials) => {
     headers: {'Authorization': 'Bearer'}
   }
   const response = await axios.post(baseUrl, credentials, config)
-  console.log(response.data)
-   
+
   return response.data
 }
 
