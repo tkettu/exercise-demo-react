@@ -15,7 +15,7 @@ import Togglable from './Togglable'
 import { exerciseConstants } from '../constants/exercise.constants'
 import SummaryTable from './SummaryTable'
 import { formatHoursMinutes} from '../_helpers/timehandlers'
-
+import { ScatterPlot } from './Graphs'
 /**
  * Returns sortable table of exercises
  * @author Tero Kettunen
@@ -212,6 +212,14 @@ class Exercises extends React.Component {
       this.handleChange(this.props.sport) */
     }
 
+    console.log('DAta on ' + data)
+    
+
+    //TODO: provide time as int (for example seconds), change as go to hh:mm
+    // Also format from user form to seconds before POST
+    const distance = _.map(data, 'distance')
+    const time = _.map(data, 'hours')
+    
     //TODO: notifications
     return (
       <div>
@@ -221,6 +229,7 @@ class Exercises extends React.Component {
           <ExerciseForm handleSubmit={this.updateExerciseTable} />
         </Togglable>
         <Togglable buttonLabel="Yhteenveto">
+          <ScatterPlot x={distance} y={time} />
           <SummaryTable data={data} />
         </Togglable>
 
