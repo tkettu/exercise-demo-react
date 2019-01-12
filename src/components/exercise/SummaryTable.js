@@ -95,11 +95,15 @@ const Summary = ({ data }) => {
 /**
  * Shows weekly totals (distance, time) of data (exercises)
  */
-class SummaryTable extends React.Component {
+const SummaryTable = (props) => (
+    <Summary data={props.data}/>
+)
+
+/* class SummaryTable extends React.Component {
 
     render() {
         return (<Summary data={this.props.data} />)
     }
-}
+} */
 
 export default SummaryTable

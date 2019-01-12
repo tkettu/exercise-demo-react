@@ -10,7 +10,7 @@ export const ScatterPlot = ({x, y}) => (
       mode: 'markers'
       },
     ]}
-    layout={ {width: 320, height: 240, title: 'liikunnat'} }
+    layout={ {width: 640 , height: 480, title: 'liikunnat'} }
     />
 )
 

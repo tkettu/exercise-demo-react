@@ -15,6 +15,7 @@ import { exerciseConstants } from '../constants/exercise.constants'
 import SummaryTable from './exercise/SummaryTable'
 import ExerciseTable from './exercise/ExerciseTable'
 import { ScatterPlot } from './exercise/Graphs'
+import { arrayToTime } from '../_helpers/timehandlers'
 
 
 const options = [
@@ -164,7 +165,7 @@ class Exercises extends React.Component {
     //TODO: provide time as int (for example seconds), change as go to hh:mm
     // Also format from user form to seconds before POST
     const distance = _.map(data, 'distance')
-    const time = _.map(data, 'hours')
+    const times = arrayToTime(data)
     
     const panes = [
       { menuItem: 'Harjoitukset', pane: 
@@ -177,7 +178,7 @@ class Exercises extends React.Component {
       { menuItem: 'Yhteenveto', pane:
         <Tab.Pane><SummaryTable data={data} /> </Tab.Pane> },
       { menuItem: 'Kuvaaja', pane: 
-        <Tab.Pane><ScatterPlot x={distance} y={time} /></Tab.Pane> },
+        <Tab.Pane><ScatterPlot x={distance} y={times} /></Tab.Pane> },
     ]  
     
 
