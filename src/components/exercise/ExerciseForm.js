@@ -2,9 +2,9 @@ import React from 'react'
 
 import { connect } from 'react-redux'
 import { Button, Form, Segment } from 'semantic-ui-react'
-import { exerciseCreation, exerciseUpdating } from '../reducers/exerciseReducer'
-import { exerciseConstants } from '../constants/exercise.constants'
-import Togglable from './Togglable'
+import { exerciseCreation, exerciseUpdating } from '../../reducers/exerciseReducer'
+import { exerciseConstants } from '../../constants/exercise.constants'
+import Togglable from '../Togglable'
 import moment from 'moment'
 
 

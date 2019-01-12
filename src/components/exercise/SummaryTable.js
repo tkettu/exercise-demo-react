@@ -2,7 +2,7 @@ import React from 'react'
 import moment from 'moment'
 import { Table } from 'semantic-ui-react'
 import _ from 'lodash'
-import { timeToString, hoursMinutesToTime } from '../_helpers/timehandlers'
+import { timeToString, hoursMinutesToTime } from '../../_helpers/timehandlers'
 
 
 const WeekSummary = ({ weekData }) => (
