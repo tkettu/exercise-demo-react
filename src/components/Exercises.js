@@ -8,7 +8,7 @@ import {
 } from '../reducers/exerciseReducer'
 import store from '../store'
 import _ from 'lodash'
-import { Segment, Form } from 'semantic-ui-react'
+import { Segment, Form, Tab, Button } from 'semantic-ui-react'
 import ExerciseForm from './exercise/ExerciseForm'
 import Togglable from './Togglable'
 import { exerciseConstants } from '../constants/exercise.constants'
@@ -37,9 +37,13 @@ const ModifyExercise = ({ exercise, handleSubmit }) => {
   
   if (exercise === null) return <div></div>
   return (
-    <ExerciseForm content={exercise} handleSubmit={handleSubmit}/>
+      <ExerciseForm content={exercise} handleSubmit={handleSubmit}/>
   )
 }
+
+/* const panes = [
+  { menuItem: 'Harjoitukset', pane: <ExerciseTable }
+] */
 
 class Exercises extends React.Component {
   constructor(props) {
@@ -162,6 +166,21 @@ class Exercises extends React.Component {
     const distance = _.map(data, 'distance')
     const time = _.map(data, 'hours')
     
+    const panes = [
+      { menuItem: 'Harjoitukset', pane: 
+        <Tab.Pane> <ExerciseTable handleSort={this.handleSort}
+          column={column} data={data} direction={direction}
+          modifyExercise={this.modifyExercise}
+          deleteExercise={this.deleteExercise}
+          />
+        </Tab.Pane>},
+      { menuItem: 'Yhteenveto', pane:
+        <Tab.Pane><SummaryTable data={data} /> </Tab.Pane> },
+      { menuItem: 'Kuvaaja', pane: 
+        <Tab.Pane><ScatterPlot x={distance} y={time} /></Tab.Pane> },
+    ]  
+    
+
     //TODO: notifications
     return (
       <div>
@@ -170,16 +189,10 @@ class Exercises extends React.Component {
         <Togglable buttonLabel="Lisää harjoitus">
           <ExerciseForm handleSubmit={this.updateExerciseTable} />
         </Togglable>
-        <Togglable buttonLabel="Yhteenveto">
-          <ScatterPlot x={distance} y={time} />
-          <SummaryTable data={data} />
-        </Togglable>
-
-        <ExerciseTable handleSort={this.handleSort}
-          column={column} data={data} direction={direction}
-          modifyExercise={this.modifyExercise}
-          deleteExercise={this.deleteExercise}
-        />
+        <Tab
+         
+          panes={panes} renderActiveOnly={false}
+           />        
       </div>
     )
 
