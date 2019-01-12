@@ -2,7 +2,7 @@ import React from 'react'
 
 //import { connect } from 'react-redux'
 import { Route, Link, Switch, withRouter, NavLink } from 'react-router-dom'
-import { Dropdown, Menu } from 'semantic-ui-react'
+import { Dropdown, Menu, Grid } from 'semantic-ui-react'
 import _ from 'lodash'
 
 import LoginForm from './LoginForm'
@@ -45,7 +45,7 @@ const options = [
 
 const Exercises2 = ({ match }) => (
 
-  <Menu.Menu >
+  <Menu.Menu>
     <Dropdown item text='Harjoitukset'>
       <Dropdown.Menu>
         {_.map(options, ({ text }) => (
@@ -61,8 +61,34 @@ const Exercises2 = ({ match }) => (
 )
 //TODO ROUTING TO /lajit/laji/{laji} that render by sport
 
-const MainMenu = () => (
-  <div>
+const MobileMenu = () => (
+   <Menu inverted>
+       <Menu.Item as={Link} to="/" >
+        koti
+      </Menu.Item>
+      {window.localStorage.getItem(userConstants.LOCAL_STORAGE) ?
+      <Menu.Menu position='right'>
+        <Dropdown item  >
+          <Dropdown.Menu >
+
+            <Dropdown.Item key='exercises' as={Link} to='/harjoitukset'>
+              Harjoitukset
+            </Dropdown.Item>
+            <Dropdown.Item key='logout' as={Link} to='/logout'>
+              Kirjaudu ulos
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      </Menu.Menu>
+      :
+      <Menu.Item position="right" as={Link} to="/login" >
+        kirjaudu
+      </Menu.Item>
+      }
+   </Menu> 
+)
+
+const AppMenu = () => (
     <Menu inverted>
       <Menu.Item as={Link} to="/" >
         koti
@@ -80,6 +106,31 @@ const MainMenu = () => (
       }
       
     </Menu>
+
+)
+
+const MainMenu = () => (
+  <div>
+    <Grid>
+      <Grid.Column
+        only='mobile'
+        width={16}
+      >
+       {MobileMenu()}
+      </Grid.Column> 
+      <Grid.Column
+        width={16}
+        only='computer'
+        >
+       {AppMenu()}
+      </Grid.Column>
+      <Grid.Column
+        width={16}
+        only='tablet'
+        >
+       {AppMenu()}
+      </Grid.Column>
+    </Grid>
     <div>
       <Switch>
         <Route exact path="/" render={() => <Home />} />
