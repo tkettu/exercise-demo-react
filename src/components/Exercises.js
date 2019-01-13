@@ -16,8 +16,10 @@ import SummaryTable from './exercise/SummaryTable'
 import ExerciseTable from './exercise/ExerciseTable'
 import { ScatterPlot } from './exercise/Graphs'
 import { arrayToTime } from '../_helpers/timehandlers'
+import moment from 'moment'
+import Moment from 'react-moment';
 
-
+let calculator = 0
 const options = [
   { key: 'ALL', text: 'Kaikki', value: '' },
   { key: 'RUN', text: 'Juoksu', value: 'Juoksu' },
@@ -151,7 +153,9 @@ class Exercises extends React.Component {
 
   render() {
     const { column, data, direction } = this.state
-
+    calculator += 1
+    console.log(`RENDERÖITY ${calculator} kertaa`)
+    
     if (this.state.sport !== this.props.sport) {
 
       //FIXME: toimii, mutta ei ole oikein, puhdasta eikä turvallista, koska setstate renderissä
@@ -159,13 +163,20 @@ class Exercises extends React.Component {
       this.handleChange(this.props.sport) */
     }
 
-    console.log('DAta on ' + data)
-    
-
+   
     //TODO: provide time as int (for example seconds), change as go to hh:mm
     // Also format from user form to seconds before POST
+    
+    //TODO: handle data at Graphs
     const distance = _.map(data, 'distance')
+
+    //TODO: Format date and add sport to definition of graph also
+    const dates = _.map(data, 'date')
     const times = arrayToTime(data)
+    
+    console.log(dates)
+ 
+    
     
     const panes = [
       { menuItem: 'Harjoitukset', pane: 
@@ -178,7 +189,7 @@ class Exercises extends React.Component {
       { menuItem: 'Yhteenveto', pane:
         <Tab.Pane><SummaryTable data={data} /> </Tab.Pane> },
       { menuItem: 'Kuvaaja', pane: 
-        <Tab.Pane><ScatterPlot x={distance} y={times} /></Tab.Pane> },
+        <Tab.Pane><ScatterPlot x={distance} y={times} text={dates} /></Tab.Pane> },
     ]  
     
 
