@@ -4,25 +4,45 @@ import { errorMsg, successMsg, clearMsg } from './messageReducer'
 
 const timeout = 5000
 
-const reducer = (state = [], action) => {
-   
+const initialState = {
+    adding: false,
+    exercises: [],
+    //FILTER: ...
+}
+
+const reducer = (state = initialState, action) => {
+    
+    console.log(state)
+    const oldExercises = state.exercises
     switch (action.type) {
         
-        case exerciseConstants.GET_ALL_REQUEST:
+        case exerciseConstants.GET_ALL_REQUEST:    
         case exerciseConstants.GET_SPORTS_REQUEST:
         case exerciseConstants.GET_ONE_REQUEST:
-             return action.data
+             return { exercises: action.data }
         case exerciseConstants.ADD_NEW_REQUEST:
-            return [...state, action.data]
+            return { adding: true, exercises: state.exercises }         
+        case exerciseConstants.ADD_NEW_SUCCESS:
+            return { 
+                adding: false, 
+                exercises: [...oldExercises, action.data] 
+            }
+        case exerciseConstants.ADD_NEW_FAILURE:
+            return { 
+                adding: false, 
+                exercises: state.exercises
+            }
         case exerciseConstants.DELETE_REQUEST:
-            const index = state.findIndex(e => e.id === action.data)
+            const index = oldExercises.findIndex(e => e.id === action.data)
             if (index === -1) return state
-            const newState = state.slice(0, index).concat(state.slice(index+1, state.length)) 
-            return newState
+            const newExercises = oldExercises.slice(0, index)
+                        .concat(oldExercises.slice(index+1, oldExercises.length)) 
+            return {exercises: newExercises}
         case exerciseConstants.UPDATE_REQUEST:
             const updatedExercise = action.data.exercise
             const id = updatedExercise.id
-            return state.map(exercise => exercise.id !== id ? exercise : updatedExercise)
+            return {exercises: state.exercises.map(exercise => 
+                                exercise.id !== id ? exercise : updatedExercise)}
         default:
             return state
     }
@@ -44,19 +64,20 @@ const getAllBySportRequest = (exercises) => ({
 
 const deleteRequest = (id) => ({ type: exerciseConstants.DELETE_REQUEST, data: id })
 
+//TODO: request, success and failures
 const updateRequest = (exercise) => ({ type: exerciseConstants.UPDATE_REQUEST, 
                                             data: { exercise: exercise } })
 
-/* export const exerciseCreation = (content) => {
+export const exerciseCreation = (content) => {
 
-    return dispatch => {
+    return async (dispatch) => {
         dispatch(addRequest(content))
-        exerciseService.addNew(content)
+        await exerciseService.addNew(content)
         .then(
             exercise => {
                 dispatch(addSuccess(exercise))
-                console.log('ADDED ' + exercise)
-                dispatch(successMsg(`Lisättiin ${exercise}`))
+                
+                dispatch(successMsg(`Lisättiin ${exercise.sport} ${exercise.date}`))
                 setTimeout(() => {
                     dispatch(clearMsg())
                   }, timeout)
@@ -70,14 +91,14 @@ const updateRequest = (exercise) => ({ type: exerciseConstants.UPDATE_REQUEST,
             }
         )
     }
-} */
-export const exerciseCreation = (content) => {
+} 
+/*export const exerciseCreation = (content) => {
     return async (dispatch) => {
         const newExercise = await exerciseService.addNew(content)
         
         dispatch(addRequest(newExercise))
     }
-}
+}*/
 
 export const exerciseRemoving = (id) => {
     return async (dispatch) => {

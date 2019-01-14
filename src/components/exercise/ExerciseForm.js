@@ -5,6 +5,8 @@ import { Button, Form, Segment } from 'semantic-ui-react'
 import { exerciseCreation, exerciseUpdating } from '../../reducers/exerciseReducer'
 import { exerciseConstants } from '../../constants/exercise.constants'
 import Togglable from '../Togglable'
+import Notification from '../Notification'
+import store from '../../store'
 import moment from 'moment'
 
 
@@ -80,10 +82,10 @@ const OldExerciseForm = ({ handleSubmit, handleChange, handleSportChange, conten
     )
 }
 
-const NewExerciseForm = ({ handleSubmit, handleChange, handleSportChange }) => (
+const NewExerciseForm = ({ adding=false, handleSubmit, handleChange, handleSportChange }) => (
     <Segment>
-
-        <Form>
+        <Notification />
+        <Form loading={adding}>
             <MainForm handleSportChange={handleSportChange} handleChange={handleChange} />
             <DateForm handleChange={handleChange} />
             <Togglable buttonLabel="Kuvaus" >
@@ -93,6 +95,7 @@ const NewExerciseForm = ({ handleSubmit, handleChange, handleSportChange }) => (
                 Lisää uusi
             </Button>
         </Form>
+        <Notification />
     </Segment>
 )
 
@@ -114,6 +117,7 @@ class ExerciseForm extends React.Component {
             avgheartrate: 0,
             maxheartrate: 0,
             description: '',
+            adding: false
         }
     }
 
@@ -136,9 +140,8 @@ class ExerciseForm extends React.Component {
     handleClick = async (e) => {
         e.preventDefault()
         const content = this.state
-
         await this.props.exerciseCreation(content)
-        this.props.handleSubmit() 
+        this.props.handleSubmit()     
     }
 
 
@@ -151,6 +154,7 @@ class ExerciseForm extends React.Component {
     }
 
     render() {
+       console.log(store.getState().exerciseReducer)
        
         //TODO: Notification kun lisätty harjoitus, sulje tai mahdollista uuden lisääminen
         if (this.props.content !== null && this.props.content !==undefined) {
@@ -163,6 +167,7 @@ class ExerciseForm extends React.Component {
         }
 
         return <NewExerciseForm 
+            adding={this.props.adding}
             handleChange={this.handleFieldChange}
             handleSubmit={this.handleClick}
             handleSportChange={this.handleSelectChange} />
@@ -171,6 +176,7 @@ class ExerciseForm extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
+        adding: store.getState().exerciseReducer.adding,
         updating: ownProps.updating,
         content: ownProps.content
     }

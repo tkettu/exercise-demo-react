@@ -16,10 +16,7 @@ import SummaryTable from './exercise/SummaryTable'
 import ExerciseTable from './exercise/ExerciseTable'
 import { ScatterPlot } from './exercise/Graphs'
 import { arrayToTime } from '../_helpers/timehandlers'
-import moment from 'moment'
-import Moment from 'react-moment';
 
-let calculator = 0
 const options = [
   { key: 'ALL', text: 'Kaikki', value: '' },
   { key: 'RUN', text: 'Juoksu', value: 'Juoksu' },
@@ -116,11 +113,15 @@ class Exercises extends React.Component {
   }
 
   updateExerciseTable = () => {
+   
     this.setState({ data: this.props.exercises })
-    const { data, column } = this.state
-
+    const { data, column, direction } = this.state
+    const sortedData = direction === 'ascending' ?
+                             _.sortBy(data, [column]) :
+                             _.sortBy(data, [column]).reverse()
+    this.setState({ data: sortedData })                    
     //Re-sort exercise table after change, by user (or default) sorted column
-    this.setState({ data: _.sortBy(data, [column]) })
+    //this.setState({ data: _.sortBy(data, [column]), direction: direction })
   }
 
   updateExercise = () => {
@@ -153,9 +154,7 @@ class Exercises extends React.Component {
 
   render() {
     const { column, data, direction } = this.state
-    calculator += 1
-    console.log(`RENDERÖITY ${calculator} kertaa`)
-    
+   
     if (this.state.sport !== this.props.sport) {
 
       //FIXME: toimii, mutta ei ole oikein, puhdasta eikä turvallista, koska setstate renderissä
@@ -173,10 +172,6 @@ class Exercises extends React.Component {
     //TODO: Format date and add sport to definition of graph also
     const dates = _.map(data, 'date')
     const times = arrayToTime(data)
-    
-    console.log(dates)
- 
-    
     
     const panes = [
       { menuItem: 'Harjoitukset', pane: 
@@ -212,10 +207,8 @@ class Exercises extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(store.getState())
-  
   return {
-    exercises: store.getState().exerciseReducer,
+    exercises: store.getState().exerciseReducer.exercises,
     sport: ownProps.sport
   }
 }
