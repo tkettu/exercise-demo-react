@@ -71,10 +71,10 @@ const OldExerciseForm = ({ handleSubmit, handleChange, handleSportChange, conten
                         sport={sport} distance={distance} hours={hours} minutes={minutes}/>
                 <DateForm handleChange={handleChange} 
                         date={date} avgHeartRate={avgHeartRate} maxHeartRate={maxHeartRate}/>
-                <Togglable buttonLabel="Kuvaus" >
+                <Togglable icon='angle right' >
                     <DescriptionForm handleChange={handleChange} description={description} />
                 </Togglable>
-                <Button onClick={handleSubmit} color='teal' fluid size='large'>
+                <Button onClick={handleSubmit} color='green' size='large'>
                     Päivitä
                 </Button>
             </Form>
@@ -88,10 +88,10 @@ const NewExerciseForm = ({ adding=false, handleSubmit, handleChange, handleSport
         <Form loading={adding}>
             <MainForm handleSportChange={handleSportChange} handleChange={handleChange} />
             <DateForm handleChange={handleChange} />
-            <Togglable buttonLabel="Kuvaus" >
+            <Togglable  icon='angle right' >
                 <DescriptionForm handleChange={handleChange} />
             </Togglable>
-            <Button onClick={handleSubmit} color='teal' fluid size='large'>
+            <Button onClick={handleSubmit} color='teal' size='medium'>
                 Lisää uusi
             </Button>
         </Form>

@@ -13,7 +13,7 @@ import { formatHoursMinutes } from '../../_helpers/timehandlers'
 const ExerciseTable = ({ handleSort, column, data, direction,
   modifyExercise, deleteExercise }) => (
 
-    <Table sortable celled fixed>
+    <Table sortable celled fixed collapsing>
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell

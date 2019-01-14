@@ -8,14 +8,14 @@ import {
 } from '../reducers/exerciseReducer'
 import store from '../store'
 import _ from 'lodash'
-import { Segment, Form, Tab, Button } from 'semantic-ui-react'
+import { Segment, Form, Tab, Button, Grid } from 'semantic-ui-react'
 import ExerciseForm from './exercise/ExerciseForm'
 import Togglable from './Togglable'
 import { exerciseConstants } from '../constants/exercise.constants'
 import SummaryTable from './exercise/SummaryTable'
 import ExerciseTable from './exercise/ExerciseTable'
 import { ScatterPlot } from './exercise/Graphs'
-import { arrayToTime } from '../_helpers/timehandlers'
+import { arrayToTime, formatDateArray } from '../_helpers/timehandlers'
 
 const options = [
   { key: 'ALL', text: 'Kaikki', value: '' },
@@ -168,23 +168,35 @@ class Exercises extends React.Component {
     
     //TODO: handle data at Graphs
     const distance = _.map(data, 'distance')
-
+    
     //TODO: Format date and add sport to definition of graph also
-    const dates = _.map(data, 'date')
+    const dates = formatDateArray(data)
     const times = arrayToTime(data)
     
     const panes = [
       { menuItem: 'Harjoitukset', pane: 
-        <Tab.Pane> <ExerciseTable handleSort={this.handleSort}
-          column={column} data={data} direction={direction}
-          modifyExercise={this.modifyExercise}
-          deleteExercise={this.deleteExercise}
-          />
+        <Tab.Pane key="exercises">
+          <Grid columns={2}>
+           
+           <Grid.Row>
+              <Grid.Column>
+                <ExerciseTable handleSort={this.handleSort}
+                column={column} data={data} direction={direction}
+                modifyExercise={this.modifyExercise}
+                deleteExercise={this.deleteExercise}
+                />
+              </Grid.Column>
+              <Grid.Column only='computer'>
+                <ScatterPlot x={distance} y={times} text={dates}/>
+              </Grid.Column>
+            </Grid.Row>
+        
+        </Grid>
         </Tab.Pane>},
       { menuItem: 'Yhteenveto', pane:
-        <Tab.Pane><SummaryTable data={data} /> </Tab.Pane> },
+        <Tab.Pane key="summary"><SummaryTable data={data} /> </Tab.Pane> },
       { menuItem: 'Kuvaaja', pane: 
-        <Tab.Pane><ScatterPlot x={distance} y={times} text={dates} /></Tab.Pane> },
+        <Tab.Pane key="plots"><ScatterPlot x={distance} y={times} text={dates}/></Tab.Pane> },
     ]  
     
 
