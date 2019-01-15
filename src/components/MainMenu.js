@@ -20,7 +20,7 @@ const ExerciseMenu = () => (
   <Menu.Menu>
 
     <Menu.Item as={Link} to="/harjoitukset">
-      harjoitukset
+      Harjoitukset
     </Menu.Item>
   </Menu.Menu>
 )
@@ -64,7 +64,7 @@ const Exercises2 = ({ match }) => (
 const MobileMenu = () => (
    <Menu inverted>
        <Menu.Item as={Link} to="/" >
-        koti
+        Koti
       </Menu.Item>
       {window.localStorage.getItem(userConstants.LOCAL_STORAGE) ?
       <Menu.Menu position='right'>
@@ -91,12 +91,12 @@ const MobileMenu = () => (
 const AppMenu = () => (
     <Menu inverted>
       <Menu.Item as={Link} to="/" >
-        koti
+        Koti
       </Menu.Item>
       {window.localStorage.getItem(userConstants.LOCAL_STORAGE) ?
           <React.Fragment>
             <ExerciseMenu />
-            <Exercises2 /> 
+            {/* <Exercises2 />  */}
             <UserMenu />
           </React.Fragment>
         :

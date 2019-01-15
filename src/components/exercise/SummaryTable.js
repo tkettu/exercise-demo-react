@@ -1,30 +1,39 @@
 import React from 'react'
 import moment from 'moment'
-import { Table } from 'semantic-ui-react'
+import { Table, Grid } from 'semantic-ui-react'
 import _ from 'lodash'
 import { timeToString, hoursMinutesToTime } from '../../_helpers/timehandlers'
 
 
-const WeekSummary = ({ weekData }) => (
+const SeasonSummary = ({ data, seasonField }) => (
 
-    <Table sortable celled fixed>
+    <Table celled fixed>
         <Table.Header>
             <Table.Row>
-                <Table.HeaderCell>Viikko</Table.HeaderCell>
+                <Table.HeaderCell>{seasonField}</Table.HeaderCell>
                 <Table.HeaderCell>Matka</Table.HeaderCell>
                 <Table.HeaderCell>Aika</Table.HeaderCell>
             </Table.Row>
         </Table.Header>
         <Table.Body>
-            {_.map(weekData, ({ sport, week, total, totalTime }) => (
-                <Table.Row key={sport+week}>
-                    <Table.Cell>{week}</Table.Cell>
+            {_.map(data, ({ sport, season, total, totalTime }) => (
+                <Table.Row key={sport+season}>
+                    <Table.Cell>{season}</Table.Cell>
                     <Table.Cell>{total}</Table.Cell>
                     <Table.Cell>{timeToString(totalTime)}</Table.Cell>
                 </Table.Row>
             ))}
         </Table.Body>
     </Table>
+)
+
+const seasonSummary = ( data, field='weekAndYear' ) => (
+    _(data).groupBy(field)
+            .map((values, key) => ({
+                 'season': key,
+                'total': _.sumBy(values, 'distance'),
+                'totalTime': _.sumBy(values, 'time')
+            })).value()
 )
 
 const Summary = ({ data }) => {
@@ -42,16 +51,42 @@ const Summary = ({ data }) => {
         'distance': distance,
         'time': hoursMinutesToTime(hours, minutes),
         'weekAndYear': moment(date).isoWeek() + '/' + moment(date).year(),
-        'monthAndYear': moment(data).month() + '/' + moment(date).year()
+        'monthAndYear': (moment(date).month() + 1) + '/' + moment(date).year()
     }))
+    console.log(weeks)
+    
 
-    const weekSummary = _(weeks).groupBy('weekAndYear')
+    const weekSummary = seasonSummary(weeks, 'weekAndYear')
+    const monthSummary = seasonSummary(weeks, 'monthAndYear')
+    console.log(weekSummary)
+    
+    console.log(monthSummary)
+    
+
+    return <Grid columns={2}>
+              <Grid.Row>
+                <Grid.Column>
+                    <SeasonSummary data={weekSummary} seasonField='Viikko' />
+                </Grid.Column>
+                <Grid.Column>
+                    <SeasonSummary data={monthSummary} seasonField='Kuukausi' />
+                </Grid.Column>
+              </Grid.Row>  
+            </Grid>
+    /* const weekSummary = _(weeks).groupBy('weekAndYear')
             .map((values, key) => ({
                 'week': key,
                 'total': _.sumBy(values, 'distance'),
                 'totalTime': _.sumBy(values, 'time')
             })).value()
-
+ */
+    /* const monthSummary = _(weeks).groupBy('monthAndYear')
+            .map((values, key) => ({
+                'month': key,
+                'total': _.sumBy(values, 'distance'),
+                'totaltime'
+            }))
+ */
     // Group by sports
    /* const weeksBySport = _.groupBy(weeks, (item) => {
         return item.sport
@@ -88,7 +123,8 @@ const Summary = ({ data }) => {
     console.log(weekSummary)
     */
 
-    return <WeekSummary weekData={weekSummary} />
+    //return <WeekSummary weekData={weekSummary} />
+
 }
 
 
