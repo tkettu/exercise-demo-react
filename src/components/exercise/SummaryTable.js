@@ -66,9 +66,11 @@ const Summary = ({ data }) => {
     return <Grid columns={2}>
               <Grid.Row>
                 <Grid.Column>
+                    <h3>Viikko-yhteenveto</h3>
                     <SeasonSummary data={weekSummary} seasonField='Viikko' />
                 </Grid.Column>
                 <Grid.Column>
+                    <h3>Kuukausi-yhteenveto</h3>
                     <SeasonSummary data={monthSummary} seasonField='Kuukausi' />
                 </Grid.Column>
               </Grid.Row>  
