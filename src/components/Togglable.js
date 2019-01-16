@@ -24,7 +24,7 @@ class Togglable extends React.Component {
       return (
         <div>
           <div >
-            <Button onClick={this.toggleVisibility} fluid size='large'>
+            <Button icon={this.props.icon} onClick={this.toggleVisibility} color={this.state.visible ? 'red' : 'green'} size='medium'>
                     { this.state.visible ? 'Peruuta' : this.props.buttonLabel }
             </Button>
           </div>

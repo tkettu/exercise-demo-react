@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-//import { BrowserRouter as Router } from 'react-router-dom'
-import { BrowserRouter, Router } from 'react-router-dom'
+import {  Router } from 'react-router-dom'
 import { Container } from 'semantic-ui-react'
-
-import './App.css'
 
 import { history } from './_helpers/history'
 import MainMenu from './components/MainMenu'
@@ -22,7 +19,7 @@ class App extends Component {
 
   render() {
     return (
-      <Container>   
+      <Container fluid>   
         <Router history={history}>
           <MainMenu />
         </Router>

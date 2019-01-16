@@ -54,7 +54,7 @@ const Login = ({ loggingIn=false, handleChange, handleSubmit }) => (
               </Segment>
             </Form>
             <Message>
-              New to us? <Link to='/register'>Sign up</Link>
+              Uusi täällä? <Link to='/register'>Rekisteröidy</Link>
             </Message>
           </Grid.Column>
         </Grid>

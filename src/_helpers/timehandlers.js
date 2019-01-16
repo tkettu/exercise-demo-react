@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import moment from 'moment'
 
 /**
  * Converts time from (decimal) hours to hh:mm 
@@ -42,5 +43,11 @@ export const formatHoursMinutes = (hours, minutes) => {
 export const arrayToTime = (data) => (
     _.map(data, ({ hours, minutes}) => (
         hours + minutes/60
+    ))
+)
+
+export const formatDateArray = (data) => (
+    _.map(data, ({date}) => (
+        moment(date).format('DD.MM.YYYY')
     ))
 )

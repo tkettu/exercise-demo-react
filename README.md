@@ -12,13 +12,15 @@ Lisäksi sovellukseen on toteutettu Rekisteröinti ja Kirjautumis toiminnot.
 
 ## TODOS
 
-- Ilmoitukset ja virheviestit harjoitusten lisäämisiin, muokkaamisiin ja poistamisiin
+- Ilmoitukset ja virheviestit harjoitusten muokkaamisiin ja poistamisiin
 - Virheiden käsittely edellä mainittuihin
-- Yhteenvetoja lisää, mm. kuukausittaiset ja kausittaiset matkat
-- Ajan yhteistuloksen laskeminen
-- matka-aika yms. graafit
+- Yhteenvetoja lisää, mm. kausittaiset matkat
 
-- Mobiili-yhteensopivuutta (Menu stackable, taulukot mobiilinäkyviksi)
+- graafeja mm. kumulatiivinen matka, vertailu edellisen vuoden kertymään
+
+- Mobiili-yhteensopivuutta ( taulukot mobiilinäkyviksi)
+
+- Custom 404 ja 500
 
 ## Backend
 
