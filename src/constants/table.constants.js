@@ -1,0 +1,7 @@
+export const tableConstants = {
+  INIT_TABLE: 'INITIALIZE_TABLE',
+  SORT_TABLE: 'SORT_TABLE',
+  UPDATE_TABLE: 'UPDATE_TABLE',
+  
+  INITIAL_SORT_COLUMN: 'date',
+}

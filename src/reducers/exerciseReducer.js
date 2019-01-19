@@ -1,28 +1,38 @@
 import exerciseService from '../services/exercises'
 import { exerciseConstants } from '../constants/exercise.constants'
 import { errorMsg, successMsg, clearMsg } from './messageReducer'
+import _ from 'lodash'
+import { tableConstants } from '../constants/table.constants'
 
 const timeout = 5000
 
 const initialState = {
     adding: false,
     exercises: [],
+    column: null,
+    direction: null
     //FILTER: ...
 }
 
 const reducer = (state = initialState, action) => {
     
     console.log(state)
+    console.log(action.data)
+    
     const oldExercises = state.exercises
     switch (action.type) {
         
         case exerciseConstants.GET_ALL_REQUEST:    
         case exerciseConstants.GET_SPORTS_REQUEST:
         case exerciseConstants.GET_ONE_REQUEST:
-             return { exercises: action.data }
+             return { 
+                 exercises: _.sortBy(action.data, [tableConstants.INITIAL_SORT_COLUMN]).reverse(),
+                 column: tableConstants.INITIAL_SORT_COLUMN
+                }
         case exerciseConstants.ADD_NEW_REQUEST:
             return { adding: true, exercises: state.exercises }         
         case exerciseConstants.ADD_NEW_SUCCESS:
+            //TODO: SORTING after new
             return { 
                 adding: false, 
                 exercises: [...oldExercises, action.data] 
@@ -41,8 +51,45 @@ const reducer = (state = initialState, action) => {
         case exerciseConstants.UPDATE_REQUEST:
             const updatedExercise = action.data.exercise
             const id = updatedExercise.id
+            //todo sorting
             return {exercises: state.exercises.map(exercise => 
                                 exercise.id !== id ? exercise : updatedExercise)}
+        
+        case tableConstants.SORT_TABLE:
+            console.log(action.data)
+            console.log(state.column)
+            
+            
+            const clickedColumn = action.data
+            if(state.column !== clickedColumn) {
+                return {
+                  column: clickedColumn,
+                  exercises: _.sortBy(state.exercises, [clickedColumn]),
+                  direction: 'ascending',
+
+                }
+              }
+            return {
+                column: state.column,
+                exercises: state.exercises.reverse(),
+                direction: state.direction === 'ascending' ? 'descending' : 'ascending',
+            }
+        case tableConstants.INIT_TABLE:
+            //data = state.exercises
+            return {
+                column: tableConstants.INITIAL_SORT_COLUMN,
+                exercises: _.sortBy(state.exercises, [tableConstants.INITIAL_SORT_COLUMN]).reverse(),
+            }
+        case tableConstants.UPDATE_TABLE:
+            //data = state.exercises
+            const sortedData = state.direction === 'ascending' ? 
+                                _.sortBy(state.exercises, [state.column]) :
+                                _.sortBy(state.exercises, [state.column]).reverse()
+            return { 
+                column: state.column,
+                exercises: sortedData,
+                direction: state.direction
+            }
         default:
             return state
     }
@@ -139,6 +186,25 @@ export const filterBySport = (sport) => {
     return async (dispatch) => {
         const exercises = await exerciseService.getAllBySport(sport)
         dispatch(getAllBySportRequest(exercises))
+    }
+}
+
+export const sortExercises = (column) => {
+    console.log(column)
+    
+    return dispatch => {
+        dispatch({
+            type: tableConstants.SORT_TABLE,
+            data: column
+        })
+    }
+}
+
+export const initTable = () => {
+    return dispatch => {
+        dispatch({
+            type: tableConstants.INIT_TABLE
+        })
     }
 }
 export default reducer

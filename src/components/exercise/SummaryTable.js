@@ -53,16 +53,10 @@ const Summary = ({ data }) => {
         'weekAndYear': moment(date).isoWeek() + '/' + moment(date).year(),
         'monthAndYear': (moment(date).month() + 1) + '/' + moment(date).year()
     }))
-    console.log(weeks)
-    
-
+  
     const weekSummary = seasonSummary(weeks, 'weekAndYear')
     const monthSummary = seasonSummary(weeks, 'monthAndYear')
-    console.log(weekSummary)
-    
-    console.log(monthSummary)
-    
-
+   
     return <Grid columns={2}>
               <Grid.Row>
                 <Grid.Column>

@@ -11,11 +11,11 @@ import _ from 'lodash'
 import { Segment, Form, Tab, Button, Grid } from 'semantic-ui-react'
 import ExerciseForm from './exercise/ExerciseForm'
 import Togglable from './Togglable'
-import { exerciseConstants } from '../constants/exercise.constants'
 import SummaryTable from './exercise/SummaryTable'
 import ExerciseTable from './exercise/ExerciseTable'
 import { ScatterPlot } from './exercise/Graphs'
 import { arrayToTime, formatDateArray } from '../_helpers/timehandlers'
+import { cumulative_sum } from '../_helpers/stats'
 
 const options = [
   { key: 'ALL', text: 'Kaikki', value: '' },
@@ -71,21 +71,22 @@ class Exercises extends React.Component {
     document.title = title
 
     this.setState({ data: this.props.exercises })
-
-    const { data } = this.state
+    //this.props.initializeTable(this.state.data)
+   
+    /* const { data } = this.state
     //Initial sorting by user VARIABLE
     this.setState({
       column: exerciseConstants.INITIAL_SORT_COLUMN,
       data: _.sortBy(data, [exerciseConstants.INITIAL_SORT_COLUMN]).reverse(),
       sport: this.props.sport
-    })
+    }) */
   }
 
   componentWillUnmount = () => {
     document.title = 'liikunnat'
   }
 
-  handleSort = clickedColumn => () => {
+  /* handleSort = clickedColumn => () => {
     const { column, data, direction } = this.state
     //data = this.props.exercises
 
@@ -103,7 +104,7 @@ class Exercises extends React.Component {
       data: data.reverse(),
       direction: direction === 'ascending' ? 'descending' : 'ascending',
     })
-  }
+  } */
 
   modifyExercise = (id) => async () => {
     const oneExer = this.state.data.find(n => n.id === id)
@@ -115,11 +116,14 @@ class Exercises extends React.Component {
   updateExerciseTable = () => {
    
     this.setState({ data: this.props.exercises })
-    const { data, column, direction } = this.state
+    console.log('UpdaTING')
+    
+    //this.props.updateTable(this.state.data)
+    /* const { data, column, direction } = this.state
     const sortedData = direction === 'ascending' ?
                              _.sortBy(data, [column]) :
                              _.sortBy(data, [column]).reverse()
-    this.setState({ data: sortedData })                    
+    this.setState({ data: sortedData })    */                 
     //Re-sort exercise table after change, by user (or default) sorted column
     //this.setState({ data: _.sortBy(data, [column]), direction: direction })
   }
@@ -161,17 +165,24 @@ class Exercises extends React.Component {
       /*this.setState({sport: this.props.sport})
       this.handleChange(this.props.sport) */
     }
+    console.log(data)
+    
 
+    //TODO: Move table handlers (sort, updating) to own component, so that for example sorting doesn't render all other components
    
     //TODO: provide time as int (for example seconds), change as go to hh:mm
     // Also format from user form to seconds before POST
     
     //TODO: handle data at Graphs
+
+    //TODO: MAP all needed values to one collection, to make sure they correspond at the graphs,
+    // --> { date: [], distance: [], time: [], cumsum: [] etc}
     const distance = _.map(data, 'distance')
     
     //TODO: Format date and add sport to definition of graph also
     const dates = formatDateArray(data)
     const times = arrayToTime(data)
+    const cumsum = cumulative_sum(distance)
     
     const panes = [
       { menuItem: 'Harjoitukset', pane: 
@@ -180,8 +191,8 @@ class Exercises extends React.Component {
            
            <Grid.Row>
               <Grid.Column>
-                <ExerciseTable handleSort={this.handleSort}
-                column={column} data={data} direction={direction}
+                <ExerciseTable
+                data={data}
                 modifyExercise={this.modifyExercise}
                 deleteExercise={this.deleteExercise}
                 />
