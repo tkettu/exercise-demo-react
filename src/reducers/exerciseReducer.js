@@ -14,12 +14,16 @@ const initialState = {
     //FILTER: ...
 }
 
+const sortedData = (data, direction, column) => (
+     direction === 'ascending' ? 
+                    _.sortBy(data, [column]) :
+                    _.sortBy(data, [column]).reverse()
+)
+
 const reducer = (state = initialState, action) => {
-    
-    console.log(state)
-    console.log(action.data)
-    
     const oldExercises = state.exercises
+    let newExercises = state.exercises
+
     switch (action.type) {
         
         case exerciseConstants.GET_ALL_REQUEST:    
@@ -30,36 +34,58 @@ const reducer = (state = initialState, action) => {
                  column: tableConstants.INITIAL_SORT_COLUMN
                 }
         case exerciseConstants.ADD_NEW_REQUEST:
-            return { adding: true, exercises: state.exercises }         
+            return { adding: true, exercises: state.exercises, column: state.column, direction: state.direction }         
         case exerciseConstants.ADD_NEW_SUCCESS:
-            //TODO: SORTING after new
-            return { 
+            newExercises = sortedData([...oldExercises, action.data], state.direction, state.column )
+             return { 
                 adding: false, 
-                exercises: [...oldExercises, action.data] 
-            }
+                exercises:  newExercises,
+                column: state.column,
+                direction: state.direction
+            }  
         case exerciseConstants.ADD_NEW_FAILURE:
+            //newExercises = state.exercises
             return { 
                 adding: false, 
-                exercises: state.exercises
-            }
+                //exercises: _.sortBy(state.exercises, [state.column]),
+                exercises: sortedData(state.exercises, state.direction, state.column),
+                column: state.column,
+                direction: state.direction
+            } 
         case exerciseConstants.DELETE_REQUEST:
             const index = oldExercises.findIndex(e => e.id === action.data)
             if (index === -1) return state
-            const newExercises = oldExercises.slice(0, index)
+            newExercises = oldExercises.slice(0, index)
                         .concat(oldExercises.slice(index+1, oldExercises.length)) 
-            return {exercises: newExercises}
+            return {
+                //exercises: _.sortBy(newExercises, [state.column]), 
+                exercises: sortedData(newExercises, state.direction, state.column), 
+                column: state.column,
+                direction: state.direction}
         case exerciseConstants.UPDATE_REQUEST:
             const updatedExercise = action.data.exercise
             const id = updatedExercise.id
-            //todo sorting
-            return {exercises: state.exercises.map(exercise => 
-                                exercise.id !== id ? exercise : updatedExercise)}
+            newExercises = state.exercises.map(exercise => 
+                exercise.id !== id ? exercise : updatedExercise)
+            return {
+                exercises: sortedData(state.exercises.map(exercise => 
+                    exercise.id !== id ? exercise : updatedExercise), state.direction, state.column),
+                column: state.column,
+                direction: state.direction
+                }
         
+        /* case tableConstants.UPDATE_TABLE:
+            //data = state.exercises
+            const sortedData = state.direction === 'ascending' ? 
+                                _.sortBy(state.exercises, [state.column]) :
+                                _.sortBy(state.exercises, [state.column]).reverse()
+            return { 
+                column: state.column,
+                exercises: sortedData,
+                direction: state.direction
+            } */
         case tableConstants.SORT_TABLE:
-            console.log(action.data)
-            console.log(state.column)
-            
-            
+          
             const clickedColumn = action.data
             if(state.column !== clickedColumn) {
                 return {
@@ -80,18 +106,9 @@ const reducer = (state = initialState, action) => {
                 column: tableConstants.INITIAL_SORT_COLUMN,
                 exercises: _.sortBy(state.exercises, [tableConstants.INITIAL_SORT_COLUMN]).reverse(),
             }
-        case tableConstants.UPDATE_TABLE:
-            //data = state.exercises
-            const sortedData = state.direction === 'ascending' ? 
-                                _.sortBy(state.exercises, [state.column]) :
-                                _.sortBy(state.exercises, [state.column]).reverse()
-            return { 
-                column: state.column,
-                exercises: sortedData,
-                direction: state.direction
-            }
         default:
             return state
+        
     }
 }
 
@@ -165,13 +182,10 @@ export const exerciseUpdating = ( id, content ) => {
 
 }
 
-
 export const exerciseInitialization = () => {
     return async (dispatch) => {
         const exercises = await exerciseService.getAll()
-      
         dispatch(getAllRequest(exercises))
-      
     }
 }
 
@@ -190,8 +204,7 @@ export const filterBySport = (sport) => {
 }
 
 export const sortExercises = (column) => {
-    console.log(column)
-    
+  
     return dispatch => {
         dispatch({
             type: tableConstants.SORT_TABLE,
@@ -207,4 +220,5 @@ export const initTable = () => {
         })
     }
 }
+
 export default reducer

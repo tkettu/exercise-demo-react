@@ -141,7 +141,7 @@ class ExerciseForm extends React.Component {
         e.preventDefault()
         const content = this.state
         await this.props.exerciseCreation(content)
-        this.props.handleSubmit()     
+        //this.props.handleSubmit()     
     }
 
 
@@ -150,7 +150,7 @@ class ExerciseForm extends React.Component {
         const id = this.props.content.id
         const content = this.state
         await this.props.exerciseUpdating(id, content)
-        this.props.handleSubmit()
+        //this.props.handleSubmit()
     }
 
     render() {
