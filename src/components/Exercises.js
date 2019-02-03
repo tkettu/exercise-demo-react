@@ -148,7 +148,7 @@ class Exercises extends React.Component {
                 />
               </Grid.Column>
               <Grid.Column only='computer'>
-                <ScatterPlot data/>
+                <ScatterPlot data={data}/>
               </Grid.Column>
             </Grid.Row>
         

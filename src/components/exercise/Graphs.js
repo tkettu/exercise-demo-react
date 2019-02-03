@@ -1,9 +1,11 @@
 import React from 'react'
 import Plot from 'react-plotly.js'
-import store from '../../store';
-import { connect } from 'react-redux';
+import store from '../../store'
+import { connect } from 'react-redux'
+import _ from 'lodash'
 
 import { arrayToTime, formatDateArray } from '../../_helpers/timehandlers'
+import { cumulative_sum } from '../../_helpers/stats'
 
 /* export const ScatterPlot = ({x, y}) => (
   <Plot
@@ -64,7 +66,31 @@ export const ScatterPlot = ({ data }) => {
 }
 
 export const CumulativeSum = ({ data }) => {
-  return <div>SUMMA</div>
+ 
+  const data2 = _.orderBy(data, 'date', 'asc')
+  
+  
+  const distance = _.map(data2, 'distance')
+  const cumsum = cumulative_sum(distance)
+  const dates = formatDateArray(data2)
+  console.log(dates)
+  console.log(cumsum)
+ 
+  //TODO: groupby year, plot years at different line
+  //TODO: [{date, distance}...]
+   return <Plot
+            data={[
+              {
+                x: dates,
+                y: cumsum,
+                mode: 'line',
+              }, 
+            ]}
+            layout={ {width: 640 , height: 480, title: 'summa', 
+              xaxis: { title: 'pvm' },
+              yaxis: { title: 'matka' },
+                } }
+              /> 
 }
 
 const PlotView = (props) => {
