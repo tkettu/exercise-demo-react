@@ -14,6 +14,7 @@ import Togglable from './Togglable'
 import SummaryTable from './exercise/SummaryTable'
 import ExerciseTable from './exercise/ExerciseTable'
 import { ScatterPlot } from './exercise/Graphs'
+import PlotView from './exercise/Graphs'
 import { arrayToTime, formatDateArray } from '../_helpers/timehandlers'
 import { cumulative_sum } from '../_helpers/stats'
 
@@ -147,7 +148,7 @@ class Exercises extends React.Component {
                 />
               </Grid.Column>
               <Grid.Column only='computer'>
-                <ScatterPlot x={distance} y={times} text={dates}/>
+                <ScatterPlot data={data}/>
               </Grid.Column>
             </Grid.Row>
         
@@ -156,7 +157,7 @@ class Exercises extends React.Component {
       { menuItem: 'Yhteenveto', pane:
         <Tab.Pane key="summary"><SummaryTable data={data} /> </Tab.Pane> },
       { menuItem: 'Kuvaaja', pane: 
-        <Tab.Pane key="plots"><ScatterPlot x={distance} y={times} text={dates}/></Tab.Pane> },
+        <Tab.Pane key="plots"><PlotView /></Tab.Pane> },
     ]  
     
 
