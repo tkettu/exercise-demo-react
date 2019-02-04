@@ -63,7 +63,7 @@ const reducer = (state = initialState, action) => {
                 column: state.column,
                 direction: state.direction}
         case exerciseConstants.UPDATE_REQUEST:
-            const updatedExercise = action.data.exercise
+            const updatedExercise = action.data
             const id = updatedExercise.id
             newExercises = state.exercises.map(exercise => 
                 exercise.id !== id ? exercise : updatedExercise)
@@ -130,7 +130,7 @@ const deleteRequest = (id) => ({ type: exerciseConstants.DELETE_REQUEST, data: i
 
 //TODO: request, success and failures
 const updateRequest = (exercise) => ({ type: exerciseConstants.UPDATE_REQUEST, 
-                                            data: { exercise: exercise } })
+                                            data: exercise })
 
 export const exerciseCreation = (content) => {
 
