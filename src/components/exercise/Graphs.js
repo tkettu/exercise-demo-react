@@ -3,8 +3,9 @@ import Plot from 'react-plotly.js'
 import store from '../../store'
 import { connect } from 'react-redux'
 import _ from 'lodash'
+import moment from 'moment'
 
-import { arrayToTime, formatDateArray } from '../../_helpers/timehandlers'
+import { arrayToTime, formatDateArray, hoursMinutesToTime } from '../../_helpers/timehandlers'
 import { cumulative_sum } from '../../_helpers/stats'
 
 /* export const ScatterPlot = ({x, y}) => (
@@ -69,7 +70,28 @@ export const CumulativeSum = ({ data }) => {
  
   const data2 = _.orderBy(data, 'date', 'asc')
   
-  
+  const weeks = _.map(data, ({ date, distance, hours, minutes, sport }) => ({
+    'sport': sport,
+    'distance': distance,
+    'time': hoursMinutesToTime(hours, minutes),
+    'daynro': moment(date).weekday(),
+    'weekAndYear': moment(date).isoWeek() + '/' + moment(date).year(),
+    'monthAndYear': (moment(date).month() + 1) + '/' + moment(date).year()
+  }))
+
+  //const data3 = _.groupBy(weeks, 'weekAndYear')
+  const data3 = _(weeks).groupBy('weekAndYear')
+    .map((values, key) => ({
+        'a': key,
+        'b': _.map(values, 'distance'),
+        'c': _.map(values, 'daynro')
+
+    })).value()
+  console.log(data3)
+ /*  const data4 = _.forEach(data3, (value, key) => {
+
+  } */
+
   const distance = _.map(data2, 'distance')
   const cumsum = cumulative_sum(distance)
   const dates = formatDateArray(data2)
