@@ -68,51 +68,50 @@ export const ScatterPlot = ({ data }) => {
 
 export const CumulativeSum = ({ data }) => {
  
-  const data2 = _.orderBy(data, 'date', 'asc')
+  const dataOrdered = _.orderBy(data, 'date', 'asc')
   
-  const weeks = _.map(data, ({ date, distance, hours, minutes, sport }) => ({
+  
+  const weeks = _.map(dataOrdered, ({ date, distance, hours, minutes, sport }) => ({
     'sport': sport,
     'distance': distance,
     'time': hoursMinutesToTime(hours, minutes),
-    'daynro': moment(date).weekday(),
+    'daynro': moment(date).isoWeekday(),
     'weekAndYear': moment(date).isoWeek() + '/' + moment(date).year(),
-    'monthAndYear': (moment(date).month() + 1) + '/' + moment(date).year()
+    'monthAndYear': (moment(date).month() + 1) + '/' + moment(date).year(),
+    'year': moment(date).year(),
+    'yearDayNro': moment(date).dayOfYear()
   }))
 
+  console.log(weeks)
+  
   //const data3 = _.groupBy(weeks, 'weekAndYear')
-  const data3 = _(weeks).groupBy('weekAndYear')
+  const years = _(weeks).groupBy('year')
     .map((values, key) => ({
-        'a': key,
-        'b': _.map(values, 'distance'),
-        'c': _.map(values, 'daynro')
+        'year': key,
+        'dist': cumulative_sum(_.map(values, 'distance')),
+        'day': _.map(values, 'yearDayNro')
 
     })).value()
-  console.log(data3)
- /*  const data4 = _.forEach(data3, (value, key) => {
-
-  } */
-
-  const distance = _.map(data2, 'distance')
-  const cumsum = cumulative_sum(distance)
-  const dates = formatDateArray(data2)
-  console.log(dates)
-  console.log(cumsum)
- 
-  //TODO: groupby year, plot years at different line
-  //TODO: [{date, distance}...]
-   return <Plot
-            data={[
-              {
-                x: dates,
-                y: cumsum,
-                mode: 'line',
-              }, 
-            ]}
-            layout={ {width: 640 , height: 480, title: 'summa', 
-              xaxis: { title: 'pvm' },
-              yaxis: { title: 'matka' },
-                } }
-              /> 
+  console.log(years)
+    const data4 = []
+    _.forEach(years, (value, key) => {
+      
+       data4.push({
+         x: value.day,
+         y: value.dist,
+         mode: 'line',
+         name: value.year
+       })
+      })
+   
+  return <Plot
+          data={data4}
+          layout={ {
+            width: 640 , height: 480, title: 'summa', 
+            xaxis: { title: 'Paiva' },
+            yaxis: { title: 'matka' },
+              } }
+              />  
 }
 
 const PlotView = (props) => {
