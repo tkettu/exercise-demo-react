@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 import moment from 'moment'
 
-import { arrayToTime, formatDateArray, hoursMinutesToTime } from '../../_helpers/timehandlers'
+import { arrayToTime, formatDateArray, hoursMinutesToTime, season } from '../../_helpers/timehandlers'
 import { cumulative_sum } from '../../_helpers/stats'
 
 /* export const ScatterPlot = ({x, y}) => (
@@ -79,13 +79,14 @@ export const CumulativeSum = ({ data }) => {
     'weekAndYear': moment(date).isoWeek() + '/' + moment(date).year(),
     'monthAndYear': (moment(date).month() + 1) + '/' + moment(date).year(),
     'year': moment(date).year(),
-    'yearDayNro': moment(date).dayOfYear()
+    'yearDayNro': moment(date).dayOfYear(),
+    'season': season(date),
   }))
 
   console.log(weeks)
   
   //const data3 = _.groupBy(weeks, 'weekAndYear')
-  const years = _(weeks).groupBy('year')
+  const years = _(weeks).groupBy('season')
     .map((values, key) => ({
         'year': key,
         'dist': cumulative_sum(_.map(values, 'distance')),

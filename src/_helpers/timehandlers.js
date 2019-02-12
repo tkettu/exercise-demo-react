@@ -51,3 +51,10 @@ export const formatDateArray = (data) => (
         moment(date).format('DD.MM.YYYY')
     ))
 )
+
+export const season = (date) => {
+    const year = moment(date).year()
+    const season = moment(date).dayOfYear() < 180 ? ((year - 1) + '-' + year) : (year + '-' + (year + 1))
+    return season
+}
+
