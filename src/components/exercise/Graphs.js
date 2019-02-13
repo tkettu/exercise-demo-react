@@ -75,24 +75,34 @@ export const CumulativeSum = ({ data }) => {
     'sport': sport,
     'distance': distance,
     'time': hoursMinutesToTime(hours, minutes),
-    'daynro': moment(date).isoWeekday(),
     'weekAndYear': moment(date).isoWeek() + '/' + moment(date).year(),
     'monthAndYear': (moment(date).month() + 1) + '/' + moment(date).year(),
     'year': moment(date).year(),
     'yearDayNro': moment(date).dayOfYear(),
+    'seasonDayNro': (moment(date).dayOfYear() + 180) % 365,
     'season': season(date),
   }))
 
   console.log(weeks)
   
   //const data3 = _.groupBy(weeks, 'weekAndYear')
-  const years = _(weeks).groupBy('season')
+ // const seasonKey = 
+  const years = _(weeks).groupBy('year')
     .map((values, key) => ({
         'year': key,
         'dist': cumulative_sum(_.map(values, 'distance')),
         'day': _.map(values, 'yearDayNro')
 
     })).value()
+
+    const seasons = _(weeks).groupBy('season')
+    .map((values, key) => ({
+        'year': key,
+        'dist': cumulative_sum(_.map(values, 'distance')),
+        'day': _.map(values, 'seasonDayNro')
+
+    })).value()
+
   console.log(years)
     const data4 = []
     _.forEach(years, (value, key) => {
@@ -104,15 +114,36 @@ export const CumulativeSum = ({ data }) => {
          name: value.year
        })
       })
+
+    const data5 = []
+    _.forEach(seasons, (value, key) => {
+      
+        data5.push({
+          x: value.day,
+          y: value.dist,
+          mode: 'line',
+          name: value.year
+        })
+      })
    
-  return <Plot
+  return <div>
+          <Plot
           data={data4}
           layout={ {
-            width: 640 , height: 480, title: 'summa', 
+            width: 1280 , height: 640, title: 'summa', 
             xaxis: { title: 'Paiva' },
             yaxis: { title: 'matka' },
-              } }
-              />  
+          } }
+          />  
+          <Plot
+            data={data5}
+            layout={ {
+              width: 1280 , height: 640, title: 'summa', 
+              xaxis: { title: 'Paiva' },
+              yaxis: { title: 'matka' },
+            } }
+            />  
+          </div>
 }
 
 const PlotView = (props) => {
