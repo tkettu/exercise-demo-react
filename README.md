@@ -22,8 +22,6 @@ Lisäksi sovellukseen on toteutettu Rekisteröinti ja Kirjautumis toiminnot.
 
 - Custom 404 ja 500
 
-- **Harjoituksen päivittäminen ei toimi?**
-
 ## Backend
 
 Backendin toteutus löytyy  [githubista](https://github.com/tkettu/exercise-demo-back)

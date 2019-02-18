@@ -15,8 +15,7 @@ import SummaryTable from './exercise/SummaryTable'
 import ExerciseTable from './exercise/ExerciseTable'
 import { ScatterPlot } from './exercise/Graphs'
 import PlotView from './exercise/Graphs'
-import { arrayToTime, formatDateArray } from '../_helpers/timehandlers'
-import { cumulative_sum } from '../_helpers/stats'
+
 
 const options = [
   { key: 'ALL', text: 'Kaikki', value: '' },
@@ -38,7 +37,7 @@ const ModifyExercise = ({ exercise, handleSubmit }) => {
   
   if (exercise === null) return <div></div>
   return (
-      <ExerciseForm content={exercise} handleSubmit={handleSubmit}/>
+        <ExerciseForm content={exercise} handleSubmit={handleSubmit}/>
   )
 }
 
@@ -73,23 +72,16 @@ class Exercises extends React.Component {
   }
 
   modifyExercise = (id) => async () => {
-    const oneExer = this.state.data.find(n => n.id === id)
+    const oneExer = this.props.exercises.find(n => n.id === id)
     this.setState({ exercise: oneExer })
   }
 
-  /* updateExerciseTable = () => {
-    this.setState({ data: this.props.exercises })
+  handleExerciseUpdate = () => {
+    this.setState({ exercise: null })
   }
 
-  updateExercise = () => {
-     this.updateExerciseTable()
-     this.setState({ exercise: null })
-  } */
-
   deleteExercise = (id) => async () => {
-
     await this.props.exerciseRemoving(id)
-    //this.updateExerciseTable()
   }
 
   handleChange = async (sport) => {
@@ -122,17 +114,8 @@ class Exercises extends React.Component {
    
     //TODO: provide time as int (for example seconds), change as go to hh:mm
     // Also format from user form to seconds before POST
-    
-    //TODO: handle data at Graphs
-
-    //TODO: MAP all needed values to one collection, to make sure they correspond at the graphs,
-    // --> { date: [], distance: [], time: [], cumsum: [] etc}
-    const distance = _.map(data, 'distance')
-    
+  
     //TODO: Format date and add sport to definition of graph also
-    const dates = formatDateArray(data)
-    const times = arrayToTime(data)
-    const cumsum = cumulative_sum(distance)
     
     const panes = [
       { menuItem: 'Harjoitukset', pane: 
@@ -165,7 +148,8 @@ class Exercises extends React.Component {
     return (
       <div>
         <Filter handleSportChange={this.handleSportChange} />
-        <ModifyExercise exercise={this.state.exercise} />
+        <ModifyExercise exercise={this.state.exercise} 
+                        handleSubmit={this.handleExerciseUpdate} />
         <Togglable buttonLabel="Lisää harjoitus">
           <ExerciseForm  />
         </Togglable>
@@ -182,6 +166,7 @@ class Exercises extends React.Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     exercises: store.getState().exerciseReducer.exercises,
+    exercise: store.getState().exerciseReducer.exercise,
     sport: ownProps.sport
   }
 }

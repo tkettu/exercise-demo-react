@@ -28,11 +28,11 @@ describe('exerciseReducer', () => {
     const newState = exerciseReducer(state, action)
     expect(newState.exercises.length).toBe(0)
   })
-  it('returns new state with updated instance with action UPDATE_REQUEST', () => {
+  it('returns new state with updated instance with action UPDATE_SUCCESS', () => {
     const state = {exercises: [{id: 123, sport: 'Juoksu'}]}
     const updatedExercise = {id: 123, sport: 'Hiihto'}
     const action = {
-      type: exerciseConstants.UPDATE_REQUEST,
+      type: exerciseConstants.UPDATE_SUCCESS,
       data: updatedExercise
     }
     deepFreeze(state)

@@ -58,15 +58,15 @@ const DescriptionForm = ({ handleChange, description='' }) => (
                     onChange={handleChange} defaultValue={description}/>
 )
 
-const OldExerciseForm = ({ handleSubmit, handleChange, handleSportChange, content, handleContent }) => {
+const OldExerciseForm = ({ updating=false, handleSubmit, handleChange, handleSportChange, content, handleContent }) => {
 
     const { sport, distance, hours, minutes, date, description, avgHeartRate, maxHeartRate } = content
     
     return (
 
         <Segment>
-
-            <Form>
+            
+            <Form loading={updating}>
                 <MainForm handleSportChange={handleSportChange} handleChange={handleChange} 
                         sport={sport} distance={distance} hours={hours} minutes={minutes}/>
                 <DateForm handleChange={handleChange} 
@@ -84,7 +84,6 @@ const OldExerciseForm = ({ handleSubmit, handleChange, handleSportChange, conten
 
 const NewExerciseForm = ({ adding=false, handleSubmit, handleChange, handleSportChange }) => (
     <Segment>
-        <Notification />
         <Form loading={adding}>
             <MainForm handleSportChange={handleSportChange} handleChange={handleChange} />
             <DateForm handleChange={handleChange} />
@@ -150,22 +149,24 @@ class ExerciseForm extends React.Component {
         const id = this.props.content.id
         const content = this.state
         await this.props.exerciseUpdating(id, content)
-        //this.props.handleSubmit()
+        this.props.handleSubmit()
     }
 
     render() {
        console.log(store.getState().exerciseReducer)
-       
+  
         //TODO: Notification kun lisätty harjoitus, sulje tai mahdollista uuden lisääminen
         if (this.props.content !== null && this.props.content !==undefined) {
+           
             return <OldExerciseForm 
+                updating={this.props.updating}
                 handleChange={this.handleFieldChange}
                 handleSubmit={this.handleUpdate}
                 handleSportChange={this.handleSelectChange}
                 content={this.props.content}
             />
         }
-
+    
         return <NewExerciseForm 
             adding={this.props.adding}
             handleChange={this.handleFieldChange}
@@ -177,7 +178,7 @@ class ExerciseForm extends React.Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         adding: store.getState().exerciseReducer.adding,
-        updating: ownProps.updating,
+        updating: store.getState().exerciseReducer.updating,
         content: ownProps.content
     }
 }
