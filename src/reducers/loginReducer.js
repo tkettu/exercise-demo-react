@@ -2,7 +2,6 @@ import loginService from '../services/login'
 import { userConstants } from '../constants/user.constants'
 import { history } from '../_helpers/history'
 import { errorMsg, successMsg, clearMsg } from './messageReducer'
-import { exerciseInitialization } from './exerciseReducer'
 
 const timeout = 5000
 
@@ -64,9 +63,8 @@ export const login = ({username, password}) => {
           dispatch(success(user))
           history.push('/')
           
-          localStorage.setItem('user', user.userName)
-          localStorage.setItem('userToken', user.accessToken)
-          const token = parseJwt(user.accessToken)
+          localStorage.setItem(userConstants.USER_NAME, user.userName)
+          localStorage.setItem(userConstants.USER_TOKEN, user.accessToken)
 
           dispatch(successMsg(`Tervetuloa ${user.userName}`))
           //dispatch(exerciseInitialization())

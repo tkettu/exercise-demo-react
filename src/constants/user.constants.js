@@ -10,4 +10,7 @@ export const userConstants = {
   LOGOUT: 'USERS_LOGOUT',
 
   LOCAL_STORAGE: 'LOGGEDReactBaseAppUSER',  
+  USER_NAME: 'user',
+  USER_TOKEN: 'userToken',
+
 }

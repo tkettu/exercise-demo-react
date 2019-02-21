@@ -10,4 +10,12 @@ const register = async (user) => {
   return response.data
 }
 
+const getSportList = async (username) => {
+  const response = await axios.get(`${baseUrl}/${username}/sports`)
+
+  console.log(response.data)
+
+  return response.data
+}
+
 export default { register }
