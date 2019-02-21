@@ -18,4 +18,4 @@ const getSportList = async (username) => {
   return response.data
 }
 
-export default { register }
+export default { register, getSportList }
