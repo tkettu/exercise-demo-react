@@ -25,7 +25,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "echo Skip build on Heroku"
   },
   "proxy": "https://exercise-demo.herokuapp.com/",
   "browserslist": [
@@ -38,5 +39,6 @@
     "deep-freeze": "0.0.1",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1"
-  }
+  },
+  "heroku-run-build-script": true
 }
