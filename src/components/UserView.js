@@ -8,7 +8,8 @@ import userService from '../services/users'
 
 const UserView = () => {
   const userName = window.localStorage.getItem(userConstants.USER_NAME)
-  userService.getSportList(userName)
+  const lista = userService.getSportList(userName)
+  console.log(lista)
   
   return <div>{userName}</div>
 }

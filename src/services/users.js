@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getConfig } from '../_helpers/config'
 
 const baseUrl = '/api/user'
 //const baseUrl = 'http://localhost:3001/users'
@@ -11,7 +12,9 @@ const register = async (user) => {
 }
 
 const getSportList = async (username) => {
-  const response = await axios.get(`${baseUrl}/${username}/sports`)
+  console.log(username)
+  
+  const response = await axios.get(`${baseUrl}/${username}/sports`, getConfig())
 
   console.log(response.data)
 
