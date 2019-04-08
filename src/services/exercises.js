@@ -1,9 +1,9 @@
 import axios from 'axios'
-
+import { getConfig } from "../_helpers/localStorage";
 const baseUrl = '/api/exercises'
 
 
-let token = null
+/* let token = null
 
 const getConfig = () => {
     
@@ -16,7 +16,7 @@ const getConfig = () => {
     }
 
     return config
-}
+} */
 
 //----ALL GETS---
 const getBase = async ( url ) => {
