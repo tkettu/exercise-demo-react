@@ -8,9 +8,11 @@ const timeout = 5000
 
 const initialState = {
     adding: false,
+    updating: false,
     exercises: [],
     column: null,
-    direction: null
+    direction: null,
+    exercise: null
     //FILTER: ...
 }
 
@@ -33,6 +35,8 @@ const reducer = (state = initialState, action) => {
                  exercises: _.sortBy(action.data, [tableConstants.INITIAL_SORT_COLUMN]).reverse(),
                  column: tableConstants.INITIAL_SORT_COLUMN
                 }
+
+        //ADDING
         case exerciseConstants.ADD_NEW_REQUEST:
             return { adding: true, exercises: state.exercises, column: state.column, direction: state.direction }         
         case exerciseConstants.ADD_NEW_SUCCESS:
@@ -47,11 +51,14 @@ const reducer = (state = initialState, action) => {
             //newExercises = state.exercises
             return { 
                 adding: false, 
+                updating: false,
                 //exercises: _.sortBy(state.exercises, [state.column]),
                 exercises: sortedData(state.exercises, state.direction, state.column),
                 column: state.column,
                 direction: state.direction
             } 
+
+
         case exerciseConstants.DELETE_REQUEST:
             const index = oldExercises.findIndex(e => e.id === action.data)
             if (index === -1) return state
@@ -62,8 +69,15 @@ const reducer = (state = initialState, action) => {
                 exercises: sortedData(newExercises, state.direction, state.column), 
                 column: state.column,
                 direction: state.direction}
+
+        //UPDATING
         case exerciseConstants.UPDATE_REQUEST:
-            const updatedExercise = action.data.exercise
+            return {updating: true, exercises: state.exercises, 
+                    column: state.column, direction: state.direction, 
+                    exercise: action.data }
+
+        case exerciseConstants.UPDATE_SUCCESS:
+            const updatedExercise = action.data
             const id = updatedExercise.id
             newExercises = state.exercises.map(exercise => 
                 exercise.id !== id ? exercise : updatedExercise)
@@ -71,7 +85,9 @@ const reducer = (state = initialState, action) => {
                 exercises: sortedData(state.exercises.map(exercise => 
                     exercise.id !== id ? exercise : updatedExercise), state.direction, state.column),
                 column: state.column,
-                direction: state.direction
+                direction: state.direction,
+                exercise: null,
+                updating: false
                 }
         
         /* case tableConstants.UPDATE_TABLE:
@@ -129,9 +145,13 @@ const getAllBySportRequest = (exercises) => ({
 const deleteRequest = (id) => ({ type: exerciseConstants.DELETE_REQUEST, data: id })
 
 //TODO: request, success and failures
-const updateRequest = (exercise) => ({ type: exerciseConstants.UPDATE_REQUEST, 
-                                            data: { exercise: exercise } })
 
+const updateRequest = (id) => ({ 
+    type: exerciseConstants.UPDATE_REQUEST, data: id 
+})
+const updateSuccess = (exercise) => ({
+    type: exerciseConstants.UPDATE_SUCCESS, data: exercise
+})
 export const exerciseCreation = (content) => {
 
     return async (dispatch) => {
@@ -176,8 +196,25 @@ export const exerciseRemoving = (id) => {
 export const exerciseUpdating = ( id, content ) => {
    
      return async (dispatch) => {
-        const exercise = await exerciseService.updateExercise(id, content)
-        dispatch(updateRequest(exercise))
+         dispatch(updateRequest(id))
+         //const exercise = 
+         await exerciseService.updateExercise(id, content)
+         .then(
+             exercise => {
+                 dispatch(updateSuccess(exercise))
+                 dispatch(successMsg(`Päivitettiin ${exercise.sport}`))
+                 setTimeout(() => {
+                    dispatch(clearMsg())
+                  }, timeout)
+             },
+             error => {
+                dispatch(addFailure(error))
+                dispatch(errorMsg(JSON.stringify(error.response.data.message)))
+                setTimeout(() => {
+                  dispatch(clearMsg())
+                }, timeout)
+             }
+         )
     } 
 
 }

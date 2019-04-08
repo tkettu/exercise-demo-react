@@ -1,22 +1,8 @@
 import axios from 'axios'
-import { getConfig } from "../_helpers/localStorage";
+import { getConfig } from '../_helpers/config'
 const baseUrl = '/api/exercises'
 
 
-/* let token = null
-
-const getConfig = () => {
-    
-    try {
-        token = localStorage.getItem('userToken')    
-    } catch (error) { 
-    }
-    const config  = {
-        headers: {'Authorization': "Bearer " + token}
-    }
-
-    return config
-} */
 
 //----ALL GETS---
 const getBase = async ( url ) => {

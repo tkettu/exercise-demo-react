@@ -16,7 +16,7 @@ Lisäksi sovellukseen on toteutettu Rekisteröinti ja Kirjautumis toiminnot.
 - Virheiden käsittely edellä mainittuihin
 - Yhteenvetoja lisää, mm. kausittaiset matkat
 
-- graafeja mm. kumulatiivinen matka, vertailu edellisen vuoden kertymään
+- graafeja mm. ~~kumulatiivinen matka, vertailu edellisen vuoden kertymään~~
 
 - Mobiili-yhteensopivuutta ( taulukot mobiilinäkyviksi)
 

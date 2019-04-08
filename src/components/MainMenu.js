@@ -1,7 +1,7 @@
 import React from 'react'
 
 //import { connect } from 'react-redux'
-import { Route, Link, Switch, withRouter, NavLink } from 'react-router-dom'
+import { Route, Link, Switch } from 'react-router-dom'
 import { Dropdown, Menu, Grid } from 'semantic-ui-react'
 import _ from 'lodash'
 
@@ -10,6 +10,7 @@ import RegisterForm from './RegisterForm'
 
 import Home from './Home'
 import Exercises from './Exercises'
+import UserView from './UserView'
 import { userConstants } from '../constants/user.constants'
 //import { changeSport  } from '../reducers/menuReducer'
 
@@ -27,7 +28,7 @@ const ExerciseMenu = () => (
 
 const UserMenu = () => (
   <Menu.Menu position="right">
-    <Menu.Item >
+    <Menu.Item as={Link} to="/user">
       {window.localStorage.getItem('user')}
     </Menu.Item>
     <Menu.Item as={Link} to="/logout" >
@@ -145,6 +146,7 @@ const MainMenu = () => (
               <Exercises sport={match.params.sport} />
             }  />
         <Route  path="/harjoitukset" render={() => <Exercises />} />
+        <Route path="/user" render={() => <UserView />} />
       </Switch>
     </div> 
   </div>

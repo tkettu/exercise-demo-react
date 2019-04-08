@@ -1,5 +1,12 @@
 import React from 'react'
 import Plot from 'react-plotly.js'
+import store from '../../store'
+import { connect } from 'react-redux'
+import _ from 'lodash'
+import moment from 'moment'
+
+import { arrayToTime, formatDateArray, hoursMinutesToTime, season } from '../../_helpers/timehandlers'
+import { cumulative_sum } from '../../_helpers/stats'
 
 /* export const ScatterPlot = ({x, y}) => (
   <Plot
@@ -18,7 +25,7 @@ import Plot from 'react-plotly.js'
 //TODO: Handle data here, handle different sport as different data attribute to legend them correctly
 //TODO: weekly, monthly total distance plots, cumulative sums comparing different months, years
 
-export const ScatterPlot = ({ x, y, text }) => (
+/* export const ScatterPlot = ({ x, y, text }) => (
   <Plot
     data={[
       {
@@ -34,5 +41,127 @@ export const ScatterPlot = ({ x, y, text }) => (
         yaxis: { title: 'aika (h)' },
               } }
     />
-)
+) */
+
+export const ScatterPlot = ({ data }) => {
+  const x =  _.map(data, 'distance')
+  const y = arrayToTime(data)
+  const text = formatDateArray(data)
+  return (
+    <Plot
+      data={[
+        {
+          x,
+          y,
+          text,
+          type: 'scatter',
+          mode: 'markers',
+        },
+      ]}
+      layout={ {width: 640 , height: 480, title: 'liikunnat', 
+          xaxis: { title: 'matka (km)' },
+          yaxis: { title: 'aika (h)' },
+                } }
+      />
+  )
+}
+
+export const CumulativeSum = ({ data }) => {
+ 
+  const dataOrdered = _.orderBy(data, 'date', 'asc')
+  
+  
+  const weeks = _.map(dataOrdered, ({ date, distance, hours, minutes, sport }) => ({
+    'sport': sport,
+    'distance': distance,
+    'time': hoursMinutesToTime(hours, minutes),
+    'weekAndYear': moment(date).isoWeek() + '/' + moment(date).year(),
+    'monthAndYear': (moment(date).month() + 1) + '/' + moment(date).year(),
+    'year': moment(date).year(),
+    'yearDayNro': moment(date).dayOfYear(),
+    'seasonDayNro': (moment(date).dayOfYear() + 180) % 365,
+    'season': season(date),
+  }))
+
+  console.log(weeks)
+  
+  //const data3 = _.groupBy(weeks, 'weekAndYear')
+ // const seasonKey = 
+  const years = _(weeks).groupBy('year')
+    .map((values, key) => ({
+        'year': key,
+        'dist': cumulative_sum(_.map(values, 'distance')),
+        'day': _.map(values, 'yearDayNro')
+
+    })).value()
+
+    const seasons = _(weeks).groupBy('season')
+    .map((values, key) => ({
+        'year': key,
+        'dist': cumulative_sum(_.map(values, 'distance')),
+        'day': _.map(values, 'seasonDayNro')
+
+    })).value()
+
+  console.log(years)
+    const data4 = []
+    _.forEach(years, (value, key) => {
+      
+       data4.push({
+         x: value.day,
+         y: value.dist,
+         mode: 'line',
+         name: value.year
+       })
+      })
+
+    const data5 = []
+    _.forEach(seasons, (value, key) => {
+      
+        data5.push({
+          x: value.day,
+          y: value.dist,
+          mode: 'line',
+          name: value.year
+        })
+      })
+   
+  return <div>
+          <Plot
+          data={data4}
+          layout={ {
+            width: 1280 , height: 640, title: 'summa', 
+            xaxis: { title: 'Paiva' },
+            yaxis: { title: 'matka' },
+          } }
+          />  
+          <Plot
+            data={data5}
+            layout={ {
+              width: 1280 , height: 640, title: 'summa', 
+              xaxis: { title: 'Paiva' },
+              yaxis: { title: 'matka' },
+            } }
+            />  
+          </div>
+}
+
+const PlotView = (props) => {
+  console.log(props.data)
+  return (<div>
+    <ScatterPlot data={props.data} />
+    <CumulativeSum data={props.data} />
+  </div>)
+  
+}
+
+const mapStateToProps = (state) => {
+  return {
+    data: store.getState().exerciseReducer.exercises
+  }
+}
+
+export default connect(
+  mapStateToProps
+)(PlotView)
 

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getConfig } from "../_helpers/localStorage"
+import { getConfig } from '../_helpers/config'
 
 const baseUrl = '/api/user'
 //const baseUrl = 'http://localhost:3001/users'
@@ -11,8 +11,14 @@ const register = async (user) => {
   return response.data
 }
 
-const getDefaultSports = async () => {
-  const response = await axios.get('/sports', getConfig())
-}  
+const getSportList = async (username) => {
+  console.log(username)
+  
+  const response = await axios.get(`${baseUrl}/${username}/sports`, getConfig())
 
-export default { register }
+  console.log(response.data)
+
+  return response.data
+}
+
+export default { register, getSportList }

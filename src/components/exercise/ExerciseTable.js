@@ -68,7 +68,7 @@ const ExerciseTableSortable = ( {handleSort, column, data, direction,
   }
 
 
-const ExerciseTable = (props) => (
+export const ExerciseTable = (props) => (
     <ExerciseTableSortable 
       data={props.data}
       handleSort={ (c) => () =>  props.sortExercises(c)}

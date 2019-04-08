@@ -61,4 +61,10 @@ export const register = (user) => {
   }
 }
 
+export const userSportList = () =>{
+  const userName = window.localStorage.getItem(userConstants.USER_NAME)
+  userService.getSportList(userName)
+ 
+}
+
 export default reducer
