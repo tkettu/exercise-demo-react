@@ -22,6 +22,8 @@ const reducer = (state = {}, action) => {
       return {
         signingUp: false
       }
+    case "DEFAULT_SPORTS":
+      return {sports: action.data}
     default:
       return state
   }
@@ -62,9 +64,24 @@ export const register = (user) => {
 }
 
 export const userSportList = () =>{
-  const userName = window.localStorage.getItem(userConstants.USER_NAME)
-  userService.getSportList(userName)
- 
+  return async dispatch => {
+    const userName = window.localStorage.getItem(userConstants.USER_NAME)
+    const lista = await userService.getSportList(userName)
+    dispatch({
+      type: "DEFAULT_SPORTS",
+      data: lista
+    })
+      /* .then(
+        sports => {
+          console.log(sports)
+          
+          dispatch({ 
+            type: "DEFAULT_SPORT",
+            data: sports
+          })
+        }
+      )
+ */  }
 }
 
 export default reducer

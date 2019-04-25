@@ -8,20 +8,15 @@ import Togglable from '../Togglable'
 import Notification from '../Notification'
 import store from '../../store'
 import moment from 'moment'
+import { options } from '../../constants/sports'
 
 
 //TODO: Get options from API, by user
-const options = [
+/*const options = [
     { key: 'RUN', text: 'Juoksu', value: 'Juoksu' },
     { key: 'SKI', text: 'Hiihto', value: 'Hiihto' },
     { key: 'WAL', text: 'Kävely', value: 'Kävely' }
-]
-
-const seasonOptions = [
-    { key: 'S18', text: 'Hiihto 18-19', value: 'Hiihto1819' },
-    { key: 'R18', text: 'Juoksu 2018', value: 'Juoksu2018' },
-    { key: 'R19', text: 'Juoksu 2019', value: 'Juoksu2019' }
-]
+]*/
 
 const MainForm = ({ handleSportChange, handleChange, sport='', distance='', hours='', minutes='' }) => (
     <Form.Group>
@@ -49,7 +44,6 @@ const DateForm = ({ handleChange, date=moment().format(exerciseConstants.DATE_FO
                 max={500} onChange={handleChange} defaultValue={avgHeartRate}/>
         <Form.Input label='max syke' name='maxheartrate' type='number' min={0}
                  max={500} onChange={handleChange}  defaultValue={maxHeartRate}/>
-        <Form.Select label='Kausi' name='season' options={seasonOptions} type='text' /> 
     </Form.Group>
 )
 

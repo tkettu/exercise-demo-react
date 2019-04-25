@@ -15,6 +15,8 @@ import { userConstants } from '../constants/user.constants'
 //import { changeSport  } from '../reducers/menuReducer'
 
 import Logout from '../_helpers/Logout'
+
+import { options } from '../constants/sports'
 //import store from '../store';
 
 const ExerciseMenu = () => (
@@ -36,13 +38,13 @@ const UserMenu = () => (
     </Menu.Item>
   </Menu.Menu>
 )
-
+/*
 const options = [
   { key: 'ALL', text: 'Kaikki', value: ''  },
   { key: 'RUN', text: 'Juoksu', value: 'Juoksu' },
   { key: 'SKI', text: 'Hiihto', value: 'Hiihto' },
   { key: 'WAL', text: 'Kävely', value: 'Kävely' }
-]
+]*/
 
 const Exercises2 = ({ match }) => (
 

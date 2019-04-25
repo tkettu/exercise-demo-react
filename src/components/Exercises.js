@@ -15,14 +15,15 @@ import SummaryTable from './exercise/SummaryTable'
 import ExerciseTable from './exercise/ExerciseTable'
 import { ScatterPlot } from './exercise/Graphs'
 import PlotView from './exercise/Graphs'
+import { options } from '../constants/sports'
 
 
-const options = [
+/*const options = [
   { key: 'ALL', text: 'Kaikki', value: '' },
   { key: 'RUN', text: 'Juoksu', value: 'Juoksu' },
   { key: 'SKI', text: 'Hiihto', value: 'Hiihto' },
   { key: 'WAL', text: 'Kävely', value: 'Kävely' }
-]
+]*/
 
 const Filter = ({ handleSportChange }) => (
   <Segment>

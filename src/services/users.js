@@ -14,7 +14,7 @@ const register = async (user) => {
 const getSportList = async (username) => {
   console.log(username)
   
-  const response = await axios.get(`${baseUrl}/${username}/sports`, getConfig())
+  const response = await axios.get(`${baseUrl}/sports`, getConfig())
 
   console.log(response.data)
 
